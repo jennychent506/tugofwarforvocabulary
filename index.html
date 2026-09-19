@@ -3,11 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>B3 英文單字片語全班拔河錦標賽</title>
+  <title>⚡ 多巴胺大對決！B3 單字片語全班拔河錦標賽 ⚡</title>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Noto+Sans+TC:wght@700;900&display=swap" rel="stylesheet">
+
   <style>
+    :root {
+      --dopa-pink: #ff2a85;
+      --dopa-yellow: #ffdf00;
+      --dopa-blue: #00d2ff;
+      --dopa-green: #05ffa1;
+      --dopa-purple: #7928ca;
+      --dopa-bg: #fff5ea;
+      --dopa-dark: #181824;
+    }
+
     * {
       box-sizing: border-box;
       user-select: none;
@@ -15,311 +27,440 @@
       touch-action: manipulation;
       margin: 0;
       padding: 0;
+      font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
     }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
+      background-color: var(--dopa-bg);
+      background-image: radial-gradient(#ffd3b6 15%, transparent 16%), radial-gradient(#a8e6cf 15%, transparent 16%);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      color: var(--dopa-dark);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* 頂部導覽列 */
+    /* 頂部多巴胺色彩條 */
     header {
-      background: #1e293b;
-      padding: 12px 20px;
+      background: #ffffff;
+      padding: 16px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #334155;
+      border-bottom: 5px solid var(--dopa-dark);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.1);
     }
-    h1 { font-size: 1.2rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-    .nav-btns { display: flex; gap: 10px; }
+    .brand-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--dopa-pink);
+      text-shadow: 3px 3px 0 var(--dopa-yellow), 4px 4px 0 var(--dopa-dark);
+      letter-spacing: 1px;
+    }
+    .nav-btns { display: flex; gap: 12px; }
     .btn {
-      background: #3b82f6;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 700;
+      border: 3px solid var(--dopa-dark);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 800;
       cursor: pointer;
-      font-size: 14px;
-      transition: opacity 0.2s;
+      font-size: 16px;
+      box-shadow: 0 5px 0 var(--dopa-dark);
+      transition: all 0.1s;
     }
-    .btn:hover { opacity: 0.9; }
-    .btn-green { background: #10b981; }
-    .btn-orange { background: #f59e0b; }
-    .btn-red { background: #ef4444; }
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 var(--dopa-dark);
+    }
+    .btn-screen { background: var(--dopa-green); color: var(--dopa-dark); }
+    .btn-ipad { background: var(--dopa-yellow); color: var(--dopa-dark); }
+    .btn-fire { background: var(--dopa-pink); color: #fff; }
 
-    /* 視圖切換 */
-    .view-container { display: none; padding: 20px; }
+    /* 視圖控制 */
+    .view-container { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
     .view-container.active { display: block; }
 
-    /* ====== 大螢幕模式 (Host View) ====== */
-    .admin-panel {
-      background: #1e293b;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
+    /* ====== 大螢幕模式 (Home) ====== */
+    .admin-card {
+      background: #ffffff;
+      border: 4px solid var(--dopa-dark);
+      border-radius: 24px;
+      padding: 20px 28px;
+      margin-bottom: 24px;
+      box-shadow: 8px 8px 0 var(--dopa-dark);
     }
-    .admin-panel textarea {
-      flex: 1;
-      min-width: 280px;
-      height: 60px;
-      background: #0f172a;
-      border: 1px solid #475569;
-      color: #fff;
-      padding: 8px;
-      border-radius: 6px;
-      font-size: 14px;
+    .scope-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .scope-chip {
+      padding: 8px 18px;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      background: #f1f5f9;
+      box-shadow: 0 3px 0 var(--dopa-dark);
+      transition: all 0.1s;
+    }
+    .scope-chip.active {
+      background: var(--dopa-yellow);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 var(--dopa-dark);
     }
 
-    /* 對戰樹狀圖 / 錦標賽看板 */
-    .bracket-wrapper {
+    .names-area {
+      width: 100%;
+      height: 64px;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      background: #fafafa;
+    }
+
+    /* 三欄大版面：勝部賽程、敗部賽程、即時排行榜 */
+    .arena-dashboard {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 20px;
     }
-    @media (max-width: 900px) {
-      .bracket-wrapper { grid-template-columns: 1fr; }
+    @media (max-width: 1100px) {
+      .arena-dashboard { grid-template-columns: 1fr; }
     }
-    .bracket-section {
-      background: #1e293b;
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid #334155;
+
+    .box-card {
+      background: #ffffff;
+      border: 4px solid var(--dopa-dark);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 6px 6px 0 var(--dopa-dark);
     }
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 12px;
+    .box-header {
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin-bottom: 16px;
       display: flex;
       justify-content: space-between;
-      color: #cbd5e1;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 3px dashed #cbd5e1;
     }
-    .match-list {
+
+    .match-item {
+      background: #f8fafc;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 0 var(--dopa-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .match-item.done {
+      background: #e6fffa;
+      border-color: #059669;
+    }
+    .p-tag {
+      font-size: 17px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+    .p-tag.winner-mark {
+      background: var(--dopa-green);
+      border: 2px solid var(--dopa-dark);
+    }
+
+    /* 得分排行榜清單 */
+    .leaderboard-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-    }
-    .match-card {
-      background: #0f172a;
-      border: 2px solid #334155;
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.2s;
-    }
-    .match-card.finished { border-color: #10b981; }
-    .match-card.playing { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-    .table-badge {
-      font-size: 12px;
-      background: #334155;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: bold;
-      color: #94a3b8;
-    }
-    .players-box {
-      display: flex;
-      align-items: center;
       gap: 10px;
-      font-size: 15px;
-      font-weight: bold;
     }
-    .player-slot {
-      padding: 4px 10px;
-      border-radius: 4px;
-      background: #1e293b;
+    .rank-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 3px solid var(--dopa-dark);
+      background: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      box-shadow: 0 3px 0 var(--dopa-dark);
     }
-    .player-slot.winner { background: #10b981; color: #fff; }
-    .vs-tag { font-size: 12px; color: #64748b; }
-
-    /* ====== 學生 iPad 模式 (Player View) ====== */
-    #playerLoginView {
-      max-width: 400px;
-      margin: 40px auto;
-      background: #1e293b;
-      padding: 24px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 6px;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      background: #0f172a;
-      border: 1px solid #475569;
+    .rank-row:nth-child(1) { background: #fff9c4; } /* 金 */
+    .rank-row:nth-child(2) { background: #e0f2fe; } /* 銀 */
+    .rank-row:nth-child(3) { background: #ffedd5; } /* 銅 */
+    .score-badge {
+      background: var(--dopa-pink);
       color: #fff;
-      font-size: 16px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 900;
     }
 
-    /* ====== 拔河對戰本體 (iPad Facing Screen) ====== */
+    /* ====== 學生 iPad 登入端 ====== */
+    #playerLoginView {
+      max-width: 460px;
+      margin: 60px auto;
+      background: #fff;
+      border: 5px solid var(--dopa-dark);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: 10px 10px 0 var(--dopa-dark);
+      text-align: center;
+    }
+    .dopa-input {
+      width: 100%;
+      padding: 14px;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 16px;
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      background: #fffdf5;
+    }
+
+    /* ====== 拔河對戰實體 (iPad 巨型高解析視角) ====== */
     #arenaView {
       position: fixed;
       inset: 0;
-      background: #0f172a;
-      z-index: 100;
+      background: var(--dopa-bg);
+      z-index: 1000;
       display: none;
       flex-direction: column;
     }
-    .player-half {
+    .player-zone {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 10px 16px;
+      padding: 16px 24px;
       position: relative;
     }
-    .player-half.p1-top {
+    .player-zone.p1-up {
       transform: rotate(180deg);
-      background: linear-gradient(180deg, #1e1e2e 0%, #2a1b24 100%);
+      background: linear-gradient(180deg, #ffc0d3 0%, #fff1f5 100%);
+      border-bottom: 5px solid var(--dopa-dark);
     }
-    .player-half.p2-bottom {
-      background: linear-gradient(180deg, #16243b 0%, #1e1e2e 100%);
+    .player-zone.p2-down {
+      background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 100%);
+      border-top: 5px solid var(--dopa-dark);
     }
-    .p-header {
+
+    /* 頂部選手資訊卡片（字體特大化） */
+    .p-status-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: bold;
-      font-size: 14px;
     }
-    .def-box {
+    .p-name-badge {
+      font-size: 24px;
+      font-weight: 900;
+      padding: 6px 18px;
+      border-radius: 50px;
+      border: 3px solid var(--dopa-dark);
+      box-shadow: 0 4px 0 var(--dopa-dark);
+    }
+    .p-name-badge.red { background: var(--dopa-pink); color: #fff; }
+    .p-name-badge.blue { background: var(--dopa-blue); color: var(--dopa-dark); }
+
+    /* 題目定義區（特大字體） */
+    .word-def-box {
       text-align: center;
-      font-size: 18px;
-      font-weight: 800;
-      color: #fef08a;
-      min-height: 28px;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--dopa-dark);
+      background: #ffffff;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 18px;
+      padding: 10px 16px;
+      box-shadow: 0 5px 0 var(--dopa-dark);
+      max-width: 800px;
+      margin: 4px auto;
     }
-    .slots-container {
+
+    /* 拼字格子區（特大方塊） */
+    .slots-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px;
-      min-height: 38px;
+      gap: 8px;
+      min-height: 52px;
+      margin: 8px 0;
     }
-    .slot {
-      width: 26px;
-      height: 34px;
-      border-bottom: 3px solid #64748b;
-      font-size: 18px;
-      font-weight: 800;
+    .tile {
+      width: 38px;
+      height: 48px;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 10px;
+      background: #ffffff;
+      font-size: 28px;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       text-transform: uppercase;
+      box-shadow: 0 4px 0 var(--dopa-dark);
     }
-    .slot.filled { border-color: #38bdf8; color: #38bdf8; }
-    .slot.space { width: 14px; border-bottom: none; }
-
-    /* 鍵盤 */
-    .kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 4px; }
-    .kb-key {
-      flex: 1;
-      max-width: 48px;
-      height: 38px;
+    .tile.active-char {
+      background: var(--dopa-yellow);
+      color: var(--dopa-dark);
+      transform: scale(1.05);
+    }
+    .tile.space-tile {
       border: none;
-      border-radius: 6px;
-      background: #334155;
-      color: #fff;
-      font-size: 17px;
-      font-weight: 700;
-      box-shadow: 0 2px 0 #0f172a;
+      background: transparent;
+      box-shadow: none;
+      width: 18px;
     }
-    .kb-key:active { transform: translateY(2px); box-shadow: none; }
-    .kb-key.func { flex: 1.5; font-size: 12px; background: #475569; }
 
-    /* 中央繩子 */
-    .tug-center {
-      height: 60px;
-      background: #020617;
-      border-top: 2px solid #334155;
-      border-bottom: 2px solid #334155;
-      position: relative;
+    /* 多巴胺鍵盤按鍵（圓潤果凍感） */
+    .keyboard-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .key-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .dopa-key {
+      flex: 1;
+      height: 48px;
+      max-width: 60px;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 12px;
+      background: #ffffff;
+      color: var(--dopa-dark);
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 4px 0 var(--dopa-dark);
+      cursor: pointer;
+    }
+    .dopa-key:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--dopa-dark);
+      background: var(--dopa-yellow);
+    }
+    .dopa-key.action-btn {
+      flex: 1.6;
+      max-width: 84px;
+      font-size: 15px;
+      background: #ffd3b6;
+    }
+
+    /* 中央巨大拔河槽 */
+    .arena-divider {
+      height: 70px;
+      background: var(--dopa-yellow);
+      border-top: 5px solid var(--dopa-dark);
+      border-bottom: 5px solid var(--dopa-dark);
       display: flex;
       align-items: center;
-      padding: 0 20px;
+      position: relative;
+      padding: 0 30px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
     }
-    .rope {
+    .giant-rope {
       width: 100%;
-      height: 12px;
-      background: #78350f;
-      border-radius: 6px;
+      height: 18px;
+      background: #a16207;
+      border: 3px solid var(--dopa-dark);
+      border-radius: 999px;
       position: relative;
     }
-    .ribbon {
+    .bow-ribbon {
       position: absolute;
-      width: 22px;
-      height: 32px;
-      top: -10px;
+      width: 32px;
+      height: 46px;
+      top: -16px;
       left: 50%;
       transform: translateX(-50%);
-      background: #ef4444;
-      border: 2px solid #fff;
-      border-radius: 4px;
-      transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: var(--dopa-pink);
+      border: 3px solid var(--dopa-dark);
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(255, 42, 133, 0.8);
+      transition: left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
   </style>
 </head>
 <body>
 
-  <!-- 頂部導航 -->
+  <!-- 頂部多巴胺列 -->
   <header>
-    <h1>⚔️ B3 單字錦標賽即時主控台</h1>
+    <div class="brand-title">💥 B3 單字拔河多巴胺錦標賽</div>
     <div class="nav-btns">
-      <button class="btn btn-green" onclick="showView('hostView')">🖥️ 大螢幕對戰表</button>
-      <button class="btn btn-orange" onclick="showView('playerLoginView')">📱 學生 iPad 對戰端</button>
+      <button class="btn btn-screen" onclick="switchView('hostView')">🖥️ 大螢幕對戰首頁</button>
+      <button class="btn btn-ipad" onclick="switchView('playerLoginView')">📱 學生 iPad 對戰端</button>
     </div>
   </header>
 
-  <!-- 1. 教師大螢幕端 (Host View) -->
+  <!-- 1. 大螢幕首頁 (Home) -->
   <div id="hostView" class="view-container active">
-    <div class="admin-panel">
-      <div style="width: 100%; font-size: 13px; color: #94a3b8; margin-bottom: 4px;">
-        📝 請輸入學生座號或姓名（逗號或換行分隔）：
+    <div class="admin-card">
+      <div class="scope-selector">
+        <span style="font-weight:900; font-size:16px;">🎯 本次出題範圍：</span>
+        <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
+        <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
+        <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
+        <span style="color:#64748b; font-size:13px; margin-left:auto;">（贏一場勝部或復活戰皆獲得 +2 分！）</span>
       </div>
-      <textarea id="studentNames">1號, 2號, 3號, 4號, 5號, 6號, 7號, 8號</textarea>
-      <button class="btn btn-green" onclick="generateTournament()">🎲 隨機分組並發布對戰</button>
-      <button class="btn btn-red" onclick="resetTournament()">🔄 重置比賽</button>
+
+      <div style="font-weight:900; font-size:15px; margin-bottom:6px;">👥 參賽同學名單（座號或姓名）：</div>
+      <textarea id="studentListInput" class="names-area">1號, 2號, 3號, 4號, 5號, 6號, 7號, 8號</textarea>
+      
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-fire" onclick="startTournament()">🎲 隨機分組並展開對戰</button>
+        <button class="btn btn-screen" onclick="resetAll()">🔄 清空比賽記錄</button>
+      </div>
     </div>
 
-    <div class="bracket-wrapper">
+    <!-- 三欄面板 -->
+    <div class="arena-dashboard">
       <!-- 勝部賽程 -->
-      <div class="bracket-section">
-        <div class="section-title">
-          <span>🏆 勝部對戰組 (Main Bracket)</span>
-          <span id="hostStatus" style="font-size:12px; color:#10b981;">● 雲端即時連線中</span>
+      <div class="box-card">
+        <div class="box-header">
+          <span>🏆 勝部大對決</span>
+          <span style="font-size:13px; color:#10b981;">● 即時同步中</span>
         </div>
-        <div class="match-list" id="mainMatchList">
-          <p style="color:#64748b; font-size:14px;">尚未產生對戰表，請點選上方「隨機分組」</p>
+        <div id="mainBracketList">
+          <p style="color:#94a3b8; font-weight:700;">點選上方「隨機分組」即刻點燃戰火！</p>
         </div>
       </div>
 
       <!-- 敗部復活賽程 -->
-      <div class="bracket-section">
-        <div class="section-title">
-          <span>🔥 敗部復活組 (Redemption Round)</span>
+      <div class="box-card">
+        <div class="box-header">
+          <span style="color:var(--dopa-pink);">🔥 敗部復活爭霸區</span>
         </div>
-        <div class="match-list" id="redemptionMatchList">
-          <p style="color:#64748b; font-size:14px;">第一輪比賽結束後，敗方自動晉級此處展開復活賽！</p>
+        <div id="redemptionBracketList">
+          <p style="color:#94a3b8; font-weight:700;">第一輪落敗選手將進入此區爭奪復活積分！</p>
+        </div>
+      </div>
+
+      <!-- 積分排行榜 -->
+      <div class="box-card" style="background: #fffcf2;">
+        <div class="box-header">
+          <span style="color:var(--dopa-purple);">👑 全班積分排行榜</span>
+          <span style="font-size:13px; color:#64748b;">每勝 +2 分</span>
+        </div>
+        <div class="leaderboard-list" id="leaderboardView">
+          <p style="color:#94a3b8; font-weight:700;">比賽開始後即時計分...</p>
         </div>
       </div>
     </div>
@@ -327,57 +468,57 @@
 
   <!-- 2. 學生 iPad 登入端 -->
   <div id="playerLoginView" class="view-container">
-    <h2 style="margin-bottom:16px; color:#38bdf8;">進入單字拔河對戰</h2>
-    <div class="form-group">
-      <label>對戰桌號 (Table #):</label>
-      <input type="number" id="inputTable" placeholder="例如：1" value="1">
-    </div>
-    <div class="form-group">
-      <label>你是哪一方？</label>
-      <select id="inputSide" style="width:100%; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #475569;">
-        <option value="1">🔴 紅方（上方選手）</option>
-        <option value="2">🔵 藍方（下方選手）</option>
-      </select>
-    </div>
-    <button class="btn btn-green" style="width:100%; padding:12px; font-size:16px;" onclick="joinMatch()">🚀 進入戰場</button>
+    <h2 style="font-size:26px; font-weight:900; color:var(--dopa-pink); margin-bottom:8px;">🚀 拔河戰士就位！</h2>
+    <p style="color:#64748b; font-weight:800; margin-bottom:20px;">請查看大螢幕上的桌號並輸入：</p>
+    
+    <label style="font-weight:900; font-size:16px;">你的對戰桌號 (Table #)</label>
+    <input type="number" id="tblNumber" class="dopa-input" value="1">
+
+    <label style="font-weight:900; font-size:16px;">選擇你的站位</label>
+    <select id="playerSide" class="dopa-input">
+      <option value="1">🔴 紅方選手（上方旋轉視角）</option>
+      <option value="2">🔵 藍方選手（下方視角）</option>
+    </select>
+
+    <button class="btn btn-fire" style="width:100%; padding:14px; font-size:20px;" onclick="enterBattle()">進入戰場！</button>
   </div>
 
-  <!-- 3. 拔河戰鬥畫面 -->
+  <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
   <div id="arenaView">
-    <!-- 上方紅方 (180度反轉) -->
-    <div class="player-half p1-top">
-      <div class="p-header">
-        <span style="color:#f43f5e;" id="p1Label">🔴 紅方</span>
-        <span id="p1Score">拉動: 0</span>
+    <!-- 上方紅方選手 (180 度反轉，對面看完全正向) -->
+    <div class="player-zone p1-up">
+      <div class="p-status-bar">
+        <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
+        <span style="font-size:22px; font-weight:900;" id="p1StepLabel">拉動: 0</span>
       </div>
-      <div class="def-box" id="p1Def">載入中...</div>
-      <div class="slots-container" id="p1Slots"></div>
-      <div id="p1Kb"></div>
+      <div class="word-def-box" id="p1Prompt">準備中...</div>
+      <div class="slots-row" id="p1Tiles"></div>
+      <div class="keyboard-wrapper" id="p1KeyboardArea"></div>
     </div>
 
-    <!-- 中央拔河 -->
-    <div class="tug-center">
-      <div class="rope">
-        <div class="ribbon" id="ribbon"></div>
+    <!-- 中央巨大多巴胺拔河槽 -->
+    <div class="arena-divider">
+      <div class="giant-rope">
+        <div class="bow-ribbon" id="bowRibbon"></div>
       </div>
     </div>
 
-    <!-- 下方藍方 (正常視角) -->
-    <div class="player-half p2-bottom">
-      <div class="p-header">
-        <span style="color:#38bdf8;" id="p2Label">🔵 藍方</span>
-        <span id="p2Score">拉動: 0</span>
+    <!-- 下方藍方選手 (正常視角) -->
+    <div class="player-zone p2-down">
+      <div class="p-status-bar">
+        <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
+        <span style="font-size:22px; font-weight:900;" id="p2StepLabel">拉動: 0</span>
       </div>
-      <div class="def-box" id="p2Def">載入中...</div>
-      <div class="slots-container" id="p2Slots"></div>
-      <div id="p2Kb"></div>
+      <div class="word-def-box" id="p2Prompt">準備中...</div>
+      <div class="slots-row" id="p2Tiles"></div>
+      <div class="keyboard-wrapper" id="p2KeyboardArea"></div>
     </div>
   </div>
 
   <script>
     // ==========================================
-    // ⚙️ 1. FIREBASE 雲端連線設定
-    // 請將下方 databaseURL 替換為您的 Realtime Database 網址
+    // ⚙️ 1. FIREBASE 雲端即時連線設定
+    // 請填入您開通的 Realtime Database URL
     // ==========================================
     const firebaseConfig = {
       databaseURL: "https://vocab-tournament-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -385,212 +526,298 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 內建 B3L1~B3L3 題庫
-    const WORD_LIST = [
-      { word: "after all", def: "畢竟" }, { word: "be about to", def: "即將；正要" }, { word: "cheer up", def: "使......振奮" },
-      { word: "confine", def: "侷限；使離不開" }, { word: "contact", def: "聯絡；接觸" }, { word: "drowsy", def: "昏昏欲睡的" },
-      { word: "employ", def: "僱用" }, { word: "frighten", def: "使驚嚇" }, { word: "hesitate", def: "猶豫" },
-      { word: "pass away", def: "過世" }, { word: "prompt", def: "促使；立即的" }, { word: "refuse", def: "拒絕" },
-      { word: "adjust", def: "調整" }, { word: "architect", def: "建築師" }, { word: "capable", def: "有能力的" },
-      { word: "collaborate", def: "合作" }, { word: "figure out", def: "想出" }, { word: "innovative", def: "創新的" },
-      { word: "reliable", def: "可信賴的" }, { word: "trial and error", def: "反覆試驗" }, { word: "unique", def: "獨特的" },
-      { word: "as a result", def: "因此" }, { word: "banish", def: "放逐" }, { word: "beneficial", def: "有益的" },
-      { word: "conflict", def: "衝突；牴觸" }, { word: "enable", def: "使⋯⋯能夠" }, { word: "freeze", def: "冷凍；受凍" },
-      { word: "make up for", def: "彌補" }, { word: "punish", def: "懲罰" }, { word: "run out of", def: "用完" }
-    ];
+    // 完整三課單字片語庫
+    const FULL_DICTIONARY = {
+      L1: [
+        { word: "after all", def: "畢竟" }, { word: "be about to", def: "即將；正要" }, { word: "cheer up", def: "使......振奮、高興" },
+        { word: "confine", def: "(vt.) 侷限；使離不開（床等）" }, { word: "contact", def: "(n./vt.) 接觸；聯絡" },
+        { word: "corporate", def: "(adj.) （大）公司的" }, { word: "corporation", def: "(n.) 大公司；集團" },
+        { word: "drowsy", def: "(adj.) 昏昏欲睡的" }, { word: "employ", def: "(vt.) 僱用" }, { word: "employee", def: "(n.) 員工" },
+        { word: "employer", def: "(n.) 雇主" }, { word: "employment", def: "(n.) 工作；受僱" }, { word: "frail", def: "(adj.) 虛弱的" },
+        { word: "fright", def: "(n.) 驚嚇" }, { word: "frighten", def: "(vt.) 使驚嚇" }, { word: "germ", def: "(n.) 細菌" },
+        { word: "hesitate", def: "(vi.) 猶豫" }, { word: "hesitation", def: "(n.) 猶豫" }, { word: "hug", def: "(n./vt.) 擁抱" },
+        { word: "ill", def: "(adj.) 生病的" }, { word: "illness", def: "(n.) 疾病；生病" }, { word: "laughter", def: "(n.) 笑聲" },
+        { word: "make a difference", def: "有所影響" }, { word: "pass away", def: "過世" }, { word: "pass on to", def: "將......傳給......" },
+        { word: "prompt", def: "(vt.) 促使 (adj.) 立即的" }, { word: "refusal", def: "(n.) 拒絕" }, { word: "refuse", def: "(v.) 拒絕" },
+        { word: "sparkle", def: "(vi./n.) 閃耀；神采" }, { word: "stretch", def: "(vt.) 伸出（手臂腿）；拉長" }, { word: "suffer", def: "(vt.) 受苦" },
+        { word: "terminal", def: "(adj.) 末期的 (n.) 航廈" }, { word: "tremendous", def: "(adj.) 相當大的" }, { word: "turn down", def: "拒絕......" },
+        { word: "warmth", def: "(n.) 熱情；溫暖" }
+      ],
+      L2: [
+        { word: "adjust", def: "(vt.) 調整" }, { word: "adjustment", def: "(n.) 調整" }, { word: "architect", def: "(n.) 建築師" },
+        { word: "architecture", def: "(n.) 建築" }, { word: "capability", def: "(n.) 能力" }, { word: "capable", def: "(adj.) 有能力的" },
+        { word: "collaborate", def: "(vi.) 合作" }, { word: "collaboration", def: "(n.) 合作" }, { word: "construct", def: "(vt.) 建造" },
+        { word: "construction", def: "(n.) 建築物；建造" }, { word: "constructive", def: "(adj.) 有建設性的" }, { word: "element", def: "(n.) 要素" },
+        { word: "elementary", def: "(adj.) 基礎的；初級的" }, { word: "exploration", def: "(n.) 探索；探究" }, { word: "explore", def: "(vt.) 探索" },
+        { word: "feedback", def: "(n.) 回饋意見" }, { word: "figure out", def: "想出" }, { word: "get down to", def: "開始做某事" },
+        { word: "graduate", def: "(n.) 大學畢業生 (vi.) 畢業" }, { word: "graduation", def: "(n.) 畢業" }, { word: "in charge", def: "主控；負責" },
+        { word: "innovate", def: "(vi.) 創新" }, { word: "innovation", def: "(n.) 新方法" }, { word: "innovative", def: "(adj.) 創新的" },
+        { word: "material", def: "(n.) 材料" }, { word: "mention", def: "(vt.) 提到" }, { word: "promise", def: "(vt./n.) 承諾；可望" },
+        { word: "rank", def: "(v.) 排序為⋯⋯" }, { word: "ranking", def: "(n.) 排名" }, { word: "reliable", def: "(adj.) 可信賴的" },
+        { word: "rely", def: "(vi.) 依賴；信任" }, { word: "roll up one's sleeves", def: "挽起袖子（開始行動）" }, { word: "route", def: "(n.) 途徑；路線" },
+        { word: "slight", def: "(adj.) 細微的" }, { word: "stability", def: "(n.) 穩定" }, { word: "stable", def: "(adj.) 穩固的" },
+        { word: "structure", def: "(n.) 結構體" }, { word: "trial and error", def: "反覆試驗" }, { word: "unique", def: "(adj.) 獨特的" }
+      ],
+      L3: [
+        { word: "as a result", def: "因此" }, { word: "banish", def: "(vt.) 放逐" }, { word: "banishment", def: "(n.) 放逐" },
+        { word: "beneficial", def: "(adj.) 有利的；有幫助的" }, { word: "benefit", def: "(n.) 益處 (vt.) 對⋯⋯有益" },
+        { word: "civilization", def: "(n.) 文明" }, { word: "conflict", def: "(n./vi.) 衝突；牴觸" }, { word: "distribute", def: "(vt.) 分發；分配" },
+        { word: "distribution", def: "(n.) 分配；分布" }, { word: "enable", def: "(vt.) 使⋯⋯能夠⋯⋯" }, { word: "fall victim to", def: "成為......的受害者" },
+        { word: "feed on", def: "靠......為食" }, { word: "freeze", def: "(vi./vt.) 受凍；冷凍；凍結" }, { word: "fur", def: "(n.) （動物的）毛皮" },
+        { word: "furious", def: "(adj.) 暴怒的" }, { word: "fury", def: "(n.) 狂怒" }, { word: "generosity", def: "(n.) 慷慨" },
+        { word: "generous", def: "(adj.) 慷慨的" }, { word: "hollow", def: "(adj.) 中空的" }, { word: "humankind", def: "(n.) 人類" },
+        { word: "make up for", def: "彌補" }, { word: "miserable", def: "(adj.) 悲慘的" }, { word: "misery", def: "(n.) 慘況" },
+        { word: "punish", def: "(vt.) 懲罰" }, { word: "punishment", def: "(n.) 懲罰" }, { word: "run out of", def: "用完" },
+        { word: "set the stage for", def: "為......做好準備" }, { word: "slaughter", def: "(vt./n.) 宰殺；屠殺" }, { word: "theft", def: "(n.) 偷竊罪" },
+        { word: "torture", def: "(vt./n.) 折磨" }, { word: "underneath", def: "(prep.) 在⋯⋯下" }, { word: "universal", def: "(adj.) 普遍的" },
+        { word: "universe", def: "(n.) 宇宙" }, { word: "upright", def: "(adj./adv.) 直立的；直立地" }, { word: "victim", def: "(n.) 受害者；罹難者" }
+      ]
+    };
 
-    // 畫面切換
-    function showView(viewId) {
+    let selectedLessons = ['L1', 'L2', 'L3'];
+
+    function toggleScope(l) {
+      const chip = document.getElementById(`chip${l}`);
+      if (selectedLessons.includes(l)) {
+        if (selectedLessons.length === 1) return;
+        selectedLessons = selectedLessons.filter(item => item !== l);
+        chip.classList.remove('active');
+      } else {
+        selectedLessons.push(l);
+        chip.classList.add('active');
+      }
+      db.ref('tournament/settings/scope').set(selectedLessons);
+    }
+
+    function switchView(id) {
       document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add('active');
+      document.getElementById(id).classList.add('active');
     }
 
     // ==========================================
-    // 🖥️ 教師主控端：隨機分組與雲端監聽
+    // 🖥️ 教師大螢幕邏輯：生成分組與雲端監聽
     // ==========================================
-    function generateTournament() {
-      const rawText = document.getElementById('studentNames').value;
-      const names = rawText.split(/[\n,]+/).map(s => s.trim()).filter(s => s);
+    function startTournament() {
+      const raw = document.getElementById('studentListInput').value;
+      const names = raw.split(/[\n,]+/).map(s => s.trim()).filter(s => s);
       if (names.length < 2) {
-        alert("請至少輸入兩位學生名單！");
+        alert("請至少輸入兩位同學名單！");
         return;
       }
 
-      // 洗牌
       const shuffled = [...names].sort(() => Math.random() - 0.5);
       const matches = {};
-      let tableIndex = 1;
+      const initialScores = {};
 
+      names.forEach(name => { initialScores[name] = 0; });
+
+      let tableCount = 1;
       for (let i = 0; i < shuffled.length; i += 2) {
         if (i + 1 < shuffled.length) {
-          matches[`match_${tableIndex}`] = {
-            table: tableIndex,
+          matches[`match_${tableCount}`] = {
+            table: tableCount,
             p1: shuffled[i],
-            p2: shuffled[i + 1],
-            winner: null,
-            status: 'waiting'
+            p2: shuffled[i+1],
+            winner: null
           };
-          tableIndex++;
+          tableCount++;
         }
       }
 
-      // 寫入雲端
       db.ref('tournament').set({
         matches: matches,
-        redemption: {}
+        scores: initialScores,
+        settings: { scope: selectedLessons }
       });
     }
 
-    function resetTournament() {
-      if (confirm("確定要重置比賽嗎？所有晉級記錄將清空。")) {
+    function resetAll() {
+      if (confirm("確定要清空所有比分與對戰記錄嗎？")) {
         db.ref('tournament').remove();
       }
     }
 
-    // 監聽雲端比賽進度
-    db.ref('tournament/matches').on('value', (snapshot) => {
-      const matches = snapshot.val();
-      const listElem = document.getElementById('mainMatchList');
-      listElem.innerHTML = '';
-      if (!matches) {
-        listElem.innerHTML = '<p style="color:#64748b; font-size:14px;">尚未產生對戰表</p>';
-        return;
-      }
+    // 監聽對戰與比分
+    db.ref('tournament').on('value', (snap) => {
+      const data = snap.val();
+      if (!data) return;
 
+      // 1. 渲染勝部
+      const mainList = document.getElementById('mainBracketList');
+      mainList.innerHTML = '';
+      const matches = data.matches || {};
       const losers = [];
-      Object.keys(matches).forEach(key => {
-        const m = matches[key];
-        const card = document.createElement('div');
-        card.className = `match-card ${m.winner ? 'finished' : ''}`;
-        card.innerHTML = `
-          <div class="table-badge">桌號 ${m.table}</div>
-          <div class="players-box">
-            <span class="player-slot ${m.winner === m.p1 ? 'winner' : ''}">🔴 ${m.p1}</span>
-            <span class="vs-tag">VS</span>
-            <span class="player-slot ${m.winner === m.p2 ? 'winner' : ''}">🔵 ${m.p2}</span>
-          </div>
-          <div style="font-size:13px; font-weight:bold; color:${m.winner ? '#10b981':'#f59e0b'};">
-            ${m.winner ? '🏆 ' + m.winner + ' 晉級' : '進行中'}
-          </div>
-        `;
-        listElem.appendChild(card);
 
-        // 收集敗部名單
+      Object.keys(matches).forEach(k => {
+        const m = matches[k];
+        const card = document.createElement('div');
+        card.className = `match-item ${m.winner ? 'done' : ''}`;
+        card.innerHTML = `
+          <span style="font-weight:900; background:#fde047; padding:4px 8px; border-radius:8px; border:2px solid #000;">第 ${m.table} 桌</span>
+          <div>
+            <span class="p-tag ${m.winner === m.p1 ? 'winner-mark' : ''}">🔴 ${m.p1}</span>
+            <span style="font-size:14px; font-weight:900; color:#94a3b8; margin:0 6px;">VS</span>
+            <span class="p-tag ${m.winner === m.p2 ? 'winner-mark' : ''}">🔵 ${m.p2}</span>
+          </div>
+          <span style="font-size:15px; font-weight:900; color:${m.winner ? '#059669':'#e11d48'};">
+            ${m.winner ? '🎉 ' + m.winner + ' 勝出 (+2分)' : '⚔️ 對決中'}
+          </span>
+        `;
+        mainList.appendChild(card);
+
         if (m.winner) {
           const loser = (m.winner === m.p1) ? m.p2 : m.p1;
           if (!losers.includes(loser)) losers.push(loser);
         }
       });
 
-      renderRedemption(losers);
+      // 2. 渲染敗部復活區
+      renderRedemption(losers, data.redemption || {});
+
+      // 3. 渲染排行榜
+      renderLeaderboard(data.scores || {});
     });
 
-    function renderRedemption(losers) {
-      const redElem = document.getElementById('redemptionMatchList');
+    function renderRedemption(losers, redemptionMatches) {
+      const redElem = document.getElementById('redemptionBracketList');
       redElem.innerHTML = '';
       if (losers.length === 0) {
-        redElem.innerHTML = '<p style="color:#64748b; font-size:14px;">第一輪比賽結束後，敗方自動晉級此處展開復活賽！</p>';
+        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:700;">第一輪落敗選手將進入此區爭奪復活積分！</p>';
         return;
       }
+
       for (let i = 0; i < losers.length; i += 2) {
         if (i + 1 < losers.length) {
+          const tId = Math.floor(i/2) + 1;
           const card = document.createElement('div');
-          card.className = 'match-card';
+          card.className = 'match-item';
           card.innerHTML = `
-            <div class="table-badge">復活桌 R${Math.floor(i/2) + 1}</div>
-            <div class="players-box">
-              <span class="player-slot">🔥 ${losers[i]}</span>
-              <span class="vs-tag">VS</span>
-              <span class="player-slot">🔥 ${losers[i+1]}</span>
+            <span style="font-weight:900; background:#ffc0d3; padding:4px 8px; border-radius:8px; border:2px solid #000;">復活桌 R${tId}</span>
+            <div>
+              <span class="p-tag">🔥 ${losers[i]}</span>
+              <span style="font-size:14px; font-weight:900; color:#94a3b8; margin:0 6px;">VS</span>
+              <span class="p-tag">🔥 ${losers[i+1]}</span>
             </div>
-            <div style="font-size:13px; color:#f59e0b; font-weight:bold;">爭奪復活席位</div>
+            <span style="font-size:14px; font-weight:900; color:var(--dopa-pink);">爭奪 +2 復活分！</span>
           `;
           redElem.appendChild(card);
         }
       }
     }
 
+    function renderLeaderboard(scores) {
+      const list = document.getElementById('leaderboardView');
+      list.innerHTML = '';
+      const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+
+      if (sorted.length === 0) {
+        list.innerHTML = '<p style="color:#94a3b8; font-weight:700;">暫無積分記錄</p>';
+        return;
+      }
+
+      sorted.forEach(([name, score], idx) => {
+        const row = document.createElement('div');
+        row.className = 'rank-row';
+        const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx+1}`));
+        row.innerHTML = `
+          <span>${medal} <strong>${name}</strong></span>
+          <span class="score-badge">${score} 分</span>
+        `;
+        list.appendChild(row);
+      });
+    }
+
     // ==========================================
-    // 📱 學生對戰端：進入拔河對決
+    // 📱 學生 iPad 對戰邏輯
     // ==========================================
-    let currentMatchRef = null;
     let currentTable = 1;
-    let myMatchData = null;
-    let tugPos = 0; // -5 ~ +5
+    let matchInfo = null;
+    let tugState = 0;
+    const p1 = { typed: '', target: null };
+    const p2 = { typed: '', target: null };
 
-    const p1State = { typed: '', q: null };
-    const p2State = { typed: '', q: null };
-
-    function joinMatch() {
-      currentTable = document.getElementById('inputTable').value;
-      const matchKey = `match_${currentTable}`;
-
-      db.ref(`tournament/matches/${matchKey}`).once('value', (snap) => {
-        myMatchData = snap.val();
-        if (!myMatchData) {
-          alert(`找不到桌號 ${currentTable} 的對戰！請先由老師端抽籤。`);
+    function enterBattle() {
+      currentTable = document.getElementById('tblNumber').value;
+      db.ref(`tournament/matches/match_${currentTable}`).once('value', (snap) => {
+        matchInfo = snap.val();
+        if (!matchInfo) {
+          alert(`找不到桌號 ${currentTable} 的對戰資訊！請確認大螢幕是否已完成分組。`);
           return;
         }
 
         document.getElementById('arenaView').style.display = 'flex';
-        document.getElementById('p1Label').innerText = `🔴 ${myMatchData.p1}`;
-        document.getElementById('p2Label').innerText = `🔵 ${myMatchData.p2}`;
+        document.getElementById('p1NameTag').innerText = `🔴 ${matchInfo.p1}`;
+        document.getElementById('p2NameTag').innerText = `🔵 ${matchInfo.p2}`;
 
-        initPlayerArena();
+        // 讀取老師設定的出題範圍
+        db.ref('tournament/settings/scope').once('value', (scSnap) => {
+          const scope = scSnap.val() || ['L1', 'L2', 'L3'];
+          buildPool(scope);
+          initArena();
+        });
       });
     }
 
-    function initPlayerArena() {
-      renderKb('p1Kb', 1);
-      renderKb('p2Kb', 2);
-      nextQ(1);
-      nextQ(2);
-      updateRopeUI();
+    let battlePool = [];
+    function buildPool(scopeList) {
+      battlePool = [];
+      scopeList.forEach(l => {
+        if (FULL_DICTIONARY[l]) {
+          battlePool.push(...FULL_DICTIONARY[l]);
+        }
+      });
     }
 
-    function sanitize(w) { return w.toLowerCase().replace(/[^a-z\s']/g, ''); }
+    function initArena() {
+      renderKeys('p1KeyboardArea', 1);
+      renderKeys('p2KeyboardArea', 2);
+      nextWord(1);
+      nextWord(2);
+      refreshRope();
+    }
 
-    function nextQ(playerId) {
-      const q = WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
-      if (playerId === 1) {
-        p1State.q = q; p1State.typed = '';
-        renderSlots(1);
+    function sanitizeWord(w) { return w.toLowerCase().replace(/[^a-z\s']/g, ''); }
+
+    function nextWord(pId) {
+      const q = battlePool[Math.floor(Math.random() * battlePool.length)];
+      if (pId === 1) {
+        p1.target = q; p1.typed = '';
+        renderPlayerTiles(1);
       } else {
-        p2State.q = q; p2State.typed = '';
-        renderSlots(2);
+        p2.target = q; p2.typed = '';
+        renderPlayerTiles(2);
       }
     }
 
-    function renderSlots(playerId) {
-      const state = playerId === 1 ? p1State : p2State;
-      const defElem = document.getElementById(playerId === 1 ? 'p1Def' : 'p2Def');
-      const slotsWrap = document.getElementById(playerId === 1 ? 'p1Slots' : 'p2Slots');
+    function renderPlayerTiles(pId) {
+      const state = pId === 1 ? p1 : p2;
+      const promptElem = document.getElementById(pId === 1 ? 'p1Prompt' : 'p2Prompt');
+      const tilesWrap = document.getElementById(pId === 1 ? 'p1Tiles' : 'p2Tiles');
 
-      defElem.innerText = state.q.def;
-      slotsWrap.innerHTML = '';
-      const target = sanitize(state.q.word);
+      promptElem.innerText = state.target.def;
+      tilesWrap.innerHTML = '';
+      const cleaned = sanitizeWord(state.target.word);
 
-      for (let i = 0; i < target.length; i++) {
-        const c = target[i];
-        const s = document.createElement('div');
-        if (c === ' ') {
-          s.className = 'slot space';
+      for (let i = 0; i < cleaned.length; i++) {
+        const char = cleaned[i];
+        const tile = document.createElement('div');
+        if (char === ' ') {
+          tile.className = 'tile space-tile';
         } else {
-          s.className = 'slot';
+          tile.className = 'tile';
           if (i < state.typed.length) {
-            s.innerText = state.typed[i];
-            s.classList.add('filled');
+            tile.innerText = state.typed[i];
+            tile.classList.add('active-char');
           }
         }
-        slotsWrap.appendChild(s);
+        tilesWrap.appendChild(tile);
       }
     }
 
-    function handleKey(playerId, key) {
-      if (Math.abs(tugPos) >= 5) return;
-      const state = playerId === 1 ? p1State : p2State;
-      const target = sanitize(state.q.word);
+    function pressKey(pId, key) {
+      if (Math.abs(tugState) >= 5) return;
+      const state = pId === 1 ? p1 : p2;
+      const target = sanitizeWord(state.target.word);
 
       if (key === 'CLEAR') {
         state.typed = '';
@@ -604,55 +831,60 @@
         }
         if (state.typed.length < target.length && key === target[nextIdx].toUpperCase()) {
           state.typed += key.toLowerCase();
-          if (state.typed === target) {
-            // 答對，拉繩子！
-            if (playerId === 1) tugPos -= 1;
-            else tugPos += 1;
-            updateRopeUI();
 
-            if (Math.abs(tugPos) >= 5) {
-              const winnerName = tugPos <= -5 ? myMatchData.p1 : myMatchData.p2;
-              alert(`🎉 恭喜 ${winnerName} 拔河獲勝！結果已自動回傳大螢幕！`);
-              db.ref(`tournament/matches/match_${currentTable}`).update({ winner: winnerName });
+          if (state.typed === target) {
+            // 答對，拉繩一步！
+            if (pId === 1) tugState -= 1;
+            else tugState += 1;
+            refreshRope();
+
+            if (Math.abs(tugState) >= 5) {
+              const winner = tugState <= -5 ? matchInfo.p1 : matchInfo.p2;
+              alert(`🎉 恭喜 ${winner} 拔河大獲全勝！為自己斬獲 +2 分！`);
+
+              // 雲端回傳獲勝者與加 2 分
+              db.ref(`tournament/matches/match_${currentTable}`).update({ winner: winner });
+              db.ref(`tournament/scores/${winner}`).transaction((cur) => (cur || 0) + 2);
+
               document.getElementById('arenaView').style.display = 'none';
-              showView('playerLoginView');
+              switchView('playerLoginView');
               return;
             }
-            nextQ(playerId);
+            nextWord(pId);
             return;
           }
         }
       }
-      renderSlots(playerId);
+      renderPlayerTiles(pId);
     }
 
-    function updateRopeUI() {
-      const ribbon = document.getElementById('ribbon');
-      ribbon.style.left = `${50 + (tugPos * 8)}%`;
-      document.getElementById('p1Score').innerText = `拉動: ${Math.max(0, -tugPos)}`;
-      document.getElementById('p2Score').innerText = `拉動: ${Math.max(0, tugPos)}`;
+    function refreshRope() {
+      const bow = document.getElementById('bowRibbon');
+      bow.style.left = `${50 + (tugState * 8)}%`;
+      document.getElementById('p1StepLabel').innerText = `拉動: ${Math.max(0, -tugState)}`;
+      document.getElementById('p2StepLabel').innerText = `拉動: ${Math.max(0, tugState)}`;
     }
 
-    const KB = [
+    const DOPA_KEYS = [
       ['Q','W','E','R','T','Y','U','I','O','P'],
       ['A','S','D','F','G','H','J','K','L'],
       ['DEL','Z','X','C','V','B','N','M','CLEAR']
     ];
 
-    function renderKb(id, pId) {
-      const wrap = document.getElementById(id);
-      wrap.innerHTML = '';
-      KB.forEach(row => {
+    function renderKeys(containerId, pId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      DOPA_KEYS.forEach(row => {
         const r = document.createElement('div');
-        r.className = 'kb-row';
+        r.className = 'key-row';
         row.forEach(k => {
-          const b = document.createElement('button');
-          b.className = 'kb-key' + (k.length > 1 ? ' func' : '');
-          b.innerText = k;
-          b.onpointerdown = (e) => { e.preventDefault(); handleKey(pId, k); };
-          r.appendChild(b);
+          const btn = document.createElement('button');
+          btn.className = 'dopa-key' + (k.length > 1 ? ' action-btn' : '');
+          btn.innerText = k;
+          btn.onpointerdown = (e) => { e.preventDefault(); pressKey(pId, k); };
+          r.appendChild(btn);
         });
-        wrap.appendChild(r);
+        container.appendChild(r);
       });
     }
   </script>
