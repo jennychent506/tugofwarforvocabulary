@@ -452,7 +452,6 @@
       ]
     };
 
-    // 遊戲狀態
     let activeLessons = ['L1', 'L2', 'L3'];
     let currentPool = [];
     let tugState = 0; // -5 代表紅方獲勝，+5 代表藍方獲勝
@@ -478,7 +477,6 @@
       } catch (e) {}
     }
 
-    // 初始化建構鍵盤
     const KB_LAYOUT = [
       ['Q','W','E','R','T','Y','U','I','O','P'],
       ['A','S','D','F','G','H','J','K','L'],
@@ -508,7 +506,6 @@
       });
     }
 
-    // 取得選中題目的字元陣列（保留單字中空行，過濾掉特殊標點）
     function sanitizeWord(w) {
       return w.toLowerCase().replace(/[^a-z\s']/g, '');
     }
@@ -564,7 +561,6 @@
         p.typed = p.typed.slice(0, -1);
         playTone(300, 0.05);
       } else {
-        // 如果下一個字元是空格，自動跳過空格填入字母
         let nextCharIndex = p.typed.length;
         if (target[nextCharIndex] === ' ') {
           p.typed += ' ';
@@ -577,13 +573,11 @@
             p.typed += key.toLowerCase();
             playTone(480, 0.06);
             
-            // 檢查是否完成單字
             if (p.typed === target) {
               handleWordCorrect(p);
               return;
             }
           } else {
-            // 打錯回饋
             playTone(180, 0.15, 'triangle');
           }
         }
@@ -591,16 +585,14 @@
       renderPlayerQuestion(p);
     }
 
-    // 答對單字拉動拔河繩
     function handleWordCorrect(p) {
       playTone(700, 0.15);
       setTimeout(() => playTone(950, 0.2), 80);
 
-      // 拔河拉鋸
       if (p.id === 1) {
-        tugState -= 1; // 紅方往左拉
+        tugState -= 1;
       } else {
-        tugState += 1; // 藍方往右拉
+        tugState += 1;
       }
 
       updateTugUI();
@@ -614,7 +606,6 @@
 
     function updateTugUI() {
       const ribbon = document.getElementById('redRibbon');
-      // 0 點是 50%，往左各 -7%，往右各 +7%
       const percentage = 50 + (tugState * 7.5);
       ribbon.style.left = `${percentage}%`;
 
@@ -651,7 +642,6 @@
       });
     }
 
-    // 設定面板
     function openSettings() {
       document.getElementById('settingsModal').style.display = 'flex';
     }
@@ -659,7 +649,7 @@
     function toggleLesson(lessonKey) {
       const chip = document.getElementById(`chk${lessonKey}`);
       if (activeLessons.includes(lessonKey)) {
-        if (activeLessons.length === 1) return; // 至少保留一課
+        if (activeLessons.length === 1) return;
         activeLessons = activeLessons.filter(k => k !== lessonKey);
         chip.classList.remove('active');
       } else {
@@ -673,7 +663,6 @@
       restartGame();
     }
 
-    // 初始化啟動
     window.onload = () => {
       renderKeyboard('p1Keyboard', 1);
       renderKeyboard('p2Keyboard', 2);
