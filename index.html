@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>⚡ 大對決！B3 單字片語全班拔河錦標賽 ⚡</title>
+  <title>我是全能拼字王！</title>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -51,20 +51,20 @@
       box-shadow: 0 6px 0 rgba(0,0,0,0.1);
     }
     .brand-title {
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       font-weight: 900;
       color: var(--dopa-pink);
-      text-shadow: 3px 3px 0 var(--dopa-yellow), 4px 4px 0 var(--dopa-dark);
-      letter-spacing: 1px;
+      text-shadow: 3px 3px 0 var(--dopa-yellow), 5px 5px 0 var(--dopa-dark);
+      letter-spacing: 2px;
     }
     .nav-btns { display: flex; gap: 12px; }
     .btn {
       border: 3px solid var(--dopa-dark);
-      padding: 10px 22px;
+      padding: 10px 24px;
       border-radius: 50px;
       font-weight: 800;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
       box-shadow: 0 5px 0 var(--dopa-dark);
       transition: all 0.1s;
     }
@@ -85,43 +85,43 @@
       background: #ffffff;
       border: 4px solid var(--dopa-dark);
       border-radius: 24px;
-      padding: 20px 28px;
+      padding: 22px 30px;
       margin-bottom: 24px;
       box-shadow: 8px 8px 0 var(--dopa-dark);
     }
     .scope-selector {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 16px;
       flex-wrap: wrap;
     }
     .scope-chip {
-      padding: 8px 18px;
+      padding: 10px 22px;
       border: 3px solid var(--dopa-dark);
       border-radius: 30px;
-      font-weight: 800;
-      font-size: 15px;
+      font-weight: 900;
+      font-size: 18px;
       cursor: pointer;
       background: #f1f5f9;
-      box-shadow: 0 3px 0 var(--dopa-dark);
+      box-shadow: 0 4px 0 var(--dopa-dark);
       transition: all 0.1s;
     }
     .scope-chip.active {
       background: var(--dopa-yellow);
       transform: translateY(-2px);
-      box-shadow: 0 5px 0 var(--dopa-dark);
+      box-shadow: 0 6px 0 var(--dopa-dark);
     }
 
     .names-area {
       width: 100%;
-      height: 64px;
+      height: 70px;
       border: 3px solid var(--dopa-dark);
       border-radius: 16px;
-      padding: 10px 14px;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 14px;
+      padding: 12px 16px;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
       background: #fafafa;
     }
 
@@ -129,7 +129,7 @@
     .arena-dashboard {
       display: grid;
       grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 20px;
+      gap: 22px;
     }
     @media (max-width: 1100px) {
       .arena-dashboard { grid-template-columns: 1fr; }
@@ -138,18 +138,18 @@
     .box-card {
       background: #ffffff;
       border: 4px solid var(--dopa-dark);
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 22px;
+      padding: 22px;
       box-shadow: 6px 6px 0 var(--dopa-dark);
     }
     .box-header {
-      font-size: 1.3rem;
+      font-size: 1.45rem;
       font-weight: 900;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       border-bottom: 3px dashed #cbd5e1;
     }
 
@@ -157,7 +157,7 @@
       background: #f8fafc;
       border: 3px solid var(--dopa-dark);
       border-radius: 16px;
-      padding: 12px 16px;
+      padding: 14px 18px;
       margin-bottom: 14px;
       box-shadow: 0 4px 0 var(--dopa-dark);
       display: flex;
@@ -169,10 +169,10 @@
       border-color: #059669;
     }
     .p-tag {
-      font-size: 17px;
+      font-size: 19px;
       font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 10px;
     }
     .p-tag.winner-mark {
       background: var(--dopa-green);
@@ -183,57 +183,57 @@
     .leaderboard-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
     .rank-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px;
-      border-radius: 14px;
+      padding: 12px 18px;
+      border-radius: 16px;
       border: 3px solid var(--dopa-dark);
       background: #fff;
-      font-size: 17px;
-      font-weight: 800;
-      box-shadow: 0 3px 0 var(--dopa-dark);
+      font-size: 19px;
+      font-weight: 900;
+      box-shadow: 0 4px 0 var(--dopa-dark);
     }
-    .rank-row:nth-child(1) { background: #fff9c4; } /* 金 */
+    .rank-row:nth-child(1) { background: #fff9c4; font-size: 21px; } /* 金 */
     .rank-row:nth-child(2) { background: #e0f2fe; } /* 銀 */
     .rank-row:nth-child(3) { background: #ffedd5; } /* 銅 */
     .score-badge {
       background: var(--dopa-pink);
       color: #fff;
-      padding: 4px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 900;
     }
 
     /* ====== 學生 iPad 登入端 ====== */
     #playerLoginView {
-      max-width: 460px;
+      max-width: 480px;
       margin: 60px auto;
       background: #fff;
       border: 5px solid var(--dopa-dark);
       border-radius: 30px;
-      padding: 32px;
+      padding: 36px;
       box-shadow: 10px 10px 0 var(--dopa-dark);
       text-align: center;
     }
     .dopa-input {
       width: 100%;
-      padding: 14px;
+      padding: 16px;
       border: 3px solid var(--dopa-dark);
-      border-radius: 16px;
-      font-size: 20px;
-      font-weight: 800;
-      margin-top: 8px;
-      margin-bottom: 20px;
+      border-radius: 18px;
+      font-size: 22px;
+      font-weight: 900;
+      margin-top: 10px;
+      margin-bottom: 22px;
       text-align: center;
       background: #fffdf5;
     }
 
-    /* ====== 拔河對戰實體 (iPad 巨型高解析視角) ====== */
+    /* ====== 拔河對戰實體 (iPad 巨型超大字體視角) ====== */
     #arenaView {
       position: fixed;
       inset: 0;
@@ -260,96 +260,98 @@
       border-top: 5px solid var(--dopa-dark);
     }
 
-    /* 頂部選手資訊卡片（字體特大化） */
+    /* 頂部選手資訊卡片（字體特大化：28px） */
     .p-status-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .p-name-badge {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
-      padding: 6px 18px;
+      padding: 8px 22px;
       border-radius: 50px;
-      border: 3px solid var(--dopa-dark);
+      border: 4px solid var(--dopa-dark);
       box-shadow: 0 4px 0 var(--dopa-dark);
     }
     .p-name-badge.red { background: var(--dopa-pink); color: #fff; }
     .p-name-badge.blue { background: var(--dopa-blue); color: var(--dopa-dark); }
 
-    /* 題目定義區（特大字體） */
+    /* 題目定義區（字體特大化：32px） */
     .word-def-box {
       text-align: center;
-      font-size: 24px;
+      font-size: 32px;
       font-weight: 900;
       color: var(--dopa-dark);
       background: #ffffff;
-      border: 3px solid var(--dopa-dark);
-      border-radius: 18px;
-      padding: 10px 16px;
-      box-shadow: 0 5px 0 var(--dopa-dark);
-      max-width: 800px;
+      border: 4px solid var(--dopa-dark);
+      border-radius: 20px;
+      padding: 12px 20px;
+      box-shadow: 0 6px 0 var(--dopa-dark);
+      max-width: 900px;
       margin: 4px auto;
+      line-height: 1.35;
     }
 
-    /* 拼字格子區（特大方塊） */
+    /* 拼字格子區（字體特大化：方塊 46x58px，文字 34px） */
     .slots-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      min-height: 52px;
-      margin: 8px 0;
+      gap: 10px;
+      min-height: 60px;
+      margin: 6px 0;
     }
     .tile {
-      width: 38px;
-      height: 48px;
-      border: 3px solid var(--dopa-dark);
-      border-radius: 10px;
+      width: 46px;
+      height: 58px;
+      border: 4px solid var(--dopa-dark);
+      border-radius: 12px;
       background: #ffffff;
-      font-size: 28px;
+      font-size: 34px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       text-transform: uppercase;
-      box-shadow: 0 4px 0 var(--dopa-dark);
+      box-shadow: 0 5px 0 var(--dopa-dark);
     }
     .tile.active-char {
       background: var(--dopa-yellow);
       color: var(--dopa-dark);
-      transform: scale(1.05);
+      transform: scale(1.08);
+      border-color: var(--dopa-dark);
     }
     .tile.space-tile {
       border: none;
       background: transparent;
       box-shadow: none;
-      width: 18px;
+      width: 22px;
     }
 
-    /* 多巴胺鍵盤按鍵（圓潤果凍感） */
+    /* 多巴胺鍵盤（大按鍵 54px 高，文字 26px） */
     .keyboard-wrapper {
-      max-width: 780px;
+      max-width: 840px;
       margin: 0 auto;
       width: 100%;
     }
     .key-row {
       display: flex;
       justify-content: center;
-      gap: 6px;
+      gap: 7px;
       margin-bottom: 6px;
     }
     .dopa-key {
       flex: 1;
-      height: 48px;
-      max-width: 60px;
-      border: 3px solid var(--dopa-dark);
-      border-radius: 12px;
+      height: 54px;
+      max-width: 66px;
+      border: 3.5px solid var(--dopa-dark);
+      border-radius: 14px;
       background: #ffffff;
       color: var(--dopa-dark);
-      font-size: 22px;
+      font-size: 26px;
       font-weight: 900;
-      box-shadow: 0 4px 0 var(--dopa-dark);
+      box-shadow: 0 5px 0 var(--dopa-dark);
       cursor: pointer;
     }
     .dopa-key:active {
@@ -359,14 +361,14 @@
     }
     .dopa-key.action-btn {
       flex: 1.6;
-      max-width: 84px;
-      font-size: 15px;
+      max-width: 96px;
+      font-size: 18px;
       background: #ffd3b6;
     }
 
     /* 中央巨大拔河槽 */
     .arena-divider {
-      height: 70px;
+      height: 72px;
       background: var(--dopa-yellow);
       border-top: 5px solid var(--dopa-dark);
       border-bottom: 5px solid var(--dopa-dark);
@@ -378,23 +380,23 @@
     }
     .giant-rope {
       width: 100%;
-      height: 18px;
+      height: 20px;
       background: #a16207;
-      border: 3px solid var(--dopa-dark);
+      border: 3.5px solid var(--dopa-dark);
       border-radius: 999px;
       position: relative;
     }
     .bow-ribbon {
       position: absolute;
-      width: 32px;
-      height: 46px;
-      top: -16px;
+      width: 36px;
+      height: 52px;
+      top: -18px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--dopa-pink);
-      border: 3px solid var(--dopa-dark);
-      border-radius: 8px;
-      box-shadow: 0 0 16px rgba(255, 42, 133, 0.8);
+      border: 3.5px solid var(--dopa-dark);
+      border-radius: 10px;
+      box-shadow: 0 0 18px rgba(255, 42, 133, 0.9);
       transition: left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
   </style>
@@ -403,7 +405,7 @@
 
   <!-- 頂部多巴胺列 -->
   <header>
-    <div class="brand-title">💥 B3 單字拔河錦標賽</div>
+    <div class="brand-title">👑 我是全能拼字王！</div>
     <div class="nav-btns">
       <button class="btn btn-screen" onclick="switchView('hostView')">🖥️ 大螢幕對戰首頁</button>
       <button class="btn btn-ipad" onclick="switchView('playerLoginView')">📱 學生 iPad 對戰端</button>
@@ -414,17 +416,17 @@
   <div id="hostView" class="view-container active">
     <div class="admin-card">
       <div class="scope-selector">
-        <span style="font-weight:900; font-size:16px;">🎯 本次出題範圍：</span>
+        <span style="font-weight:900; font-size:20px;">🎯 本次對戰範圍：</span>
         <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
         <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
         <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
-        <span style="color:#64748b; font-size:13px; margin-left:auto;">（贏一場勝部或復活戰皆獲得 +2 分！）</span>
+        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（勝部或復活戰獲勝皆得 +2 分！）</span>
       </div>
 
-      <div style="font-weight:900; font-size:15px; margin-bottom:6px;">👥 參賽同學名單（座號或姓名）：</div>
+      <div style="font-weight:900; font-size:18px; margin-bottom:8px;">👥 參賽同學名單（座號或姓名）：</div>
       <textarea id="studentListInput" class="names-area">1號, 2號, 3號, 4號, 5號, 6號, 7號, 8號</textarea>
       
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
         <button class="btn btn-fire" onclick="startTournament()">🎲 隨機分組並展開對戰</button>
         <button class="btn btn-screen" onclick="resetAll()">🔄 清空比賽記錄</button>
       </div>
@@ -436,10 +438,10 @@
       <div class="box-card">
         <div class="box-header">
           <span>🏆 勝部大對決</span>
-          <span style="font-size:13px; color:#10b981;">● 即時同步中</span>
+          <span style="font-size:14px; color:#10b981;">● 即時同步中</span>
         </div>
         <div id="mainBracketList">
-          <p style="color:#94a3b8; font-weight:700;">點選上方「隨機分組」即刻點燃戰火！</p>
+          <p style="color:#94a3b8; font-weight:800; font-size:17px;">點選上方「隨機分組」即刻點燃戰火！</p>
         </div>
       </div>
 
@@ -449,7 +451,7 @@
           <span style="color:var(--dopa-pink);">🔥 敗部復活爭霸區</span>
         </div>
         <div id="redemptionBracketList">
-          <p style="color:#94a3b8; font-weight:700;">第一輪落敗選手將進入此區爭奪復活積分！</p>
+          <p style="color:#94a3b8; font-weight:800; font-size:17px;">第一輪落敗選手將進入此區爭奪復活積分！</p>
         </div>
       </div>
 
@@ -457,10 +459,10 @@
       <div class="box-card" style="background: #fffcf2;">
         <div class="box-header">
           <span style="color:var(--dopa-purple);">👑 全班積分排行榜</span>
-          <span style="font-size:13px; color:#64748b;">每勝 +2 分</span>
+          <span style="font-size:15px; color:#64748b;">每勝 +2 分</span>
         </div>
         <div class="leaderboard-list" id="leaderboardView">
-          <p style="color:#94a3b8; font-weight:700;">比賽開始後即時計分...</p>
+          <p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後即時計分...</p>
         </div>
       </div>
     </div>
@@ -468,19 +470,19 @@
 
   <!-- 2. 學生 iPad 登入端 -->
   <div id="playerLoginView" class="view-container">
-    <h2 style="font-size:26px; font-weight:900; color:var(--dopa-pink); margin-bottom:8px;">🚀 拔河戰士就位！</h2>
-    <p style="color:#64748b; font-weight:800; margin-bottom:20px;">請查看大螢幕上的桌號並輸入：</p>
+    <h2 style="font-size:32px; font-weight:900; color:var(--dopa-pink); margin-bottom:10px;">👑 我是全能拼字王！</h2>
+    <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看黑板上的桌號並輸入：</p>
     
-    <label style="font-weight:900; font-size:16px;">你的對戰桌號 (Table #)</label>
+    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (Table #)</label>
     <input type="number" id="tblNumber" class="dopa-input" value="1">
 
-    <label style="font-weight:900; font-size:16px;">選擇你的站位</label>
+    <label style="font-weight:900; font-size:18px;">選擇你的站位</label>
     <select id="playerSide" class="dopa-input">
       <option value="1">🔴 紅方選手（上方旋轉視角）</option>
       <option value="2">🔵 藍方選手（下方視角）</option>
     </select>
 
-    <button class="btn btn-fire" style="width:100%; padding:14px; font-size:20px;" onclick="enterBattle()">進入戰場！</button>
+    <button class="btn btn-fire" style="width:100%; padding:16px; font-size:24px;" onclick="enterBattle()">🚀 進入戰場！</button>
   </div>
 
   <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
@@ -489,7 +491,7 @@
     <div class="player-zone p1-up">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
-        <span style="font-size:22px; font-weight:900;" id="p1StepLabel">拉動: 0</span>
+        <span style="font-size:26px; font-weight:900;" id="p1StepLabel">拉動: 0</span>
       </div>
       <div class="word-def-box" id="p1Prompt">準備中...</div>
       <div class="slots-row" id="p1Tiles"></div>
@@ -507,7 +509,7 @@
     <div class="player-zone p2-down">
       <div class="p-status-bar">
         <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
-        <span style="font-size:22px; font-weight:900;" id="p2StepLabel">拉動: 0</span>
+        <span style="font-size:26px; font-weight:900;" id="p2StepLabel">拉動: 0</span>
       </div>
       <div class="word-def-box" id="p2Prompt">準備中...</div>
       <div class="slots-row" id="p2Tiles"></div>
@@ -518,7 +520,7 @@
   <script>
     // ==========================================
     // ⚙️ 1. FIREBASE 雲端即時連線設定
-    // 請填入您開通的 Realtime Database URL
+    // 請確認下方 databaseURL 替換為您的 Realtime Database 網址
     // ==========================================
     const firebaseConfig = {
       databaseURL: "https://vocab-tournament-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -530,17 +532,17 @@
     const FULL_DICTIONARY = {
       L1: [
         { word: "after all", def: "畢竟" }, { word: "be about to", def: "即將；正要" }, { word: "cheer up", def: "使......振奮、高興" },
-        { word: "confine", def: "(vt.) 侷限；使離不開（床等）" }, { word: "contact", def: "(n./vt.) 接觸；聯絡" },
-        { word: "corporate", def: "(adj.) （大）公司的" }, { word: "corporation", def: "(n.) 大公司；集團" },
-        { word: "drowsy", def: "(adj.) 昏昏欲睡的" }, { word: "employ", def: "(vt.) 僱用" }, { word: "employee", def: "(n.) 員工" },
+        { word: "confine", def: "(vt.) 侷限；限定；使離不開（床等）" }, { word: "contact", def: "(n./vt.) 接觸；聯絡" },
+        { word: "corporate", def: "(adj.) （大）公司的" }, { word: "corporation", def: "(n.) 大公司；集團公司" },
+        { word: "drowsy", def: "(adj.) 昏昏欲睡的" }, { word: "employ", def: "(vt.) 僱用" }, { word: "employee", def: "(n.) 員工；受僱者" },
         { word: "employer", def: "(n.) 雇主" }, { word: "employment", def: "(n.) 工作；受僱" }, { word: "frail", def: "(adj.) 虛弱的" },
         { word: "fright", def: "(n.) 驚嚇" }, { word: "frighten", def: "(vt.) 使驚嚇" }, { word: "germ", def: "(n.) 細菌" },
         { word: "hesitate", def: "(vi.) 猶豫" }, { word: "hesitation", def: "(n.) 猶豫" }, { word: "hug", def: "(n./vt.) 擁抱" },
-        { word: "ill", def: "(adj.) 生病的" }, { word: "illness", def: "(n.) 疾病；生病" }, { word: "laughter", def: "(n.) 笑聲" },
+        { word: "ill", def: "(adj.) 生病的" }, { word: "illness", def: "(n.) 疾病；生病" }, { word: "laughter", def: "(n.) 笑；笑聲" },
         { word: "make a difference", def: "有所影響" }, { word: "pass away", def: "過世" }, { word: "pass on to", def: "將......傳給......" },
-        { word: "prompt", def: "(vt.) 促使 (adj.) 立即的" }, { word: "refusal", def: "(n.) 拒絕" }, { word: "refuse", def: "(v.) 拒絕" },
-        { word: "sparkle", def: "(vi./n.) 閃耀；神采" }, { word: "stretch", def: "(vt.) 伸出（手臂腿）；拉長" }, { word: "suffer", def: "(vt.) 受苦" },
-        { word: "terminal", def: "(adj.) 末期的 (n.) 航廈" }, { word: "tremendous", def: "(adj.) 相當大的" }, { word: "turn down", def: "拒絕......" },
+        { word: "prompt", def: "(vt.) 促使 (adj.) 立即的" }, { word: "refusal", def: "(n.) 拒絕" }, { word: "refuse", def: "(vi./vt.) 拒絕" },
+        { word: "sparkle", def: "(vi./n.) 閃耀；神采" }, { word: "stretch", def: "(vt.) 伸出（手臂腿）；拉長" }, { word: "suffer", def: "(vt./vi.) 受苦" },
+        { word: "terminal", def: "(adj.) 末期的 (n.) 航廈；總站" }, { word: "tremendous", def: "(adj.) 相當大的" }, { word: "turn down", def: "拒絕......" },
         { word: "warmth", def: "(n.) 熱情；溫暖" }
       ],
       L2: [
@@ -653,13 +655,13 @@
         const card = document.createElement('div');
         card.className = `match-item ${m.winner ? 'done' : ''}`;
         card.innerHTML = `
-          <span style="font-weight:900; background:#fde047; padding:4px 8px; border-radius:8px; border:2px solid #000;">第 ${m.table} 桌</span>
+          <span style="font-weight:900; background:#fde047; padding:6px 12px; border-radius:10px; border:2.5px solid #000; font-size:17px;">第 ${m.table} 桌</span>
           <div>
             <span class="p-tag ${m.winner === m.p1 ? 'winner-mark' : ''}">🔴 ${m.p1}</span>
-            <span style="font-size:14px; font-weight:900; color:#94a3b8; margin:0 6px;">VS</span>
+            <span style="font-size:16px; font-weight:900; color:#94a3b8; margin:0 8px;">VS</span>
             <span class="p-tag ${m.winner === m.p2 ? 'winner-mark' : ''}">🔵 ${m.p2}</span>
           </div>
-          <span style="font-size:15px; font-weight:900; color:${m.winner ? '#059669':'#e11d48'};">
+          <span style="font-size:17px; font-weight:900; color:${m.winner ? '#059669':'#e11d48'};">
             ${m.winner ? '🎉 ' + m.winner + ' 勝出 (+2分)' : '⚔️ 對決中'}
           </span>
         `;
@@ -682,7 +684,7 @@
       const redElem = document.getElementById('redemptionBracketList');
       redElem.innerHTML = '';
       if (losers.length === 0) {
-        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:700;">第一輪落敗選手將進入此區爭奪復活積分！</p>';
+        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">第一輪落敗選手將進入此區爭奪復活積分！</p>';
         return;
       }
 
@@ -692,13 +694,13 @@
           const card = document.createElement('div');
           card.className = 'match-item';
           card.innerHTML = `
-            <span style="font-weight:900; background:#ffc0d3; padding:4px 8px; border-radius:8px; border:2px solid #000;">復活桌 R${tId}</span>
+            <span style="font-weight:900; background:#ffc0d3; padding:6px 12px; border-radius:10px; border:2.5px solid #000; font-size:17px;">復活桌 R${tId}</span>
             <div>
               <span class="p-tag">🔥 ${losers[i]}</span>
-              <span style="font-size:14px; font-weight:900; color:#94a3b8; margin:0 6px;">VS</span>
+              <span style="font-size:16px; font-weight:900; color:#94a3b8; margin:0 8px;">VS</span>
               <span class="p-tag">🔥 ${losers[i+1]}</span>
             </div>
-            <span style="font-size:14px; font-weight:900; color:var(--dopa-pink);">爭奪 +2 復活分！</span>
+            <span style="font-size:16px; font-weight:900; color:var(--dopa-pink);">爭奪 +2 復活分！</span>
           `;
           redElem.appendChild(card);
         }
@@ -711,7 +713,7 @@
       const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
 
       if (sorted.length === 0) {
-        list.innerHTML = '<p style="color:#94a3b8; font-weight:700;">暫無積分記錄</p>';
+        list.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">暫無積分記錄</p>';
         return;
       }
 
@@ -840,7 +842,7 @@
 
             if (Math.abs(tugState) >= 5) {
               const winner = tugState <= -5 ? matchInfo.p1 : matchInfo.p2;
-              alert(`🎉 恭喜 ${winner} 拔河大獲全勝！為自己斬獲 +2 分！`);
+              alert(`🎉 恭喜 ${winner} 拔河大獲全勝！勇奪 +2 分！`);
 
               // 雲端回傳獲勝者與加 2 分
               db.ref(`tournament/matches/match_${currentTable}`).update({ winner: winner });
