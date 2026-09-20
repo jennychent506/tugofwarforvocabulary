@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>我是全能拼字王！</title>
+  <title>我是全能拼字王！無限輪轉爭霸賽</title>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -76,7 +76,7 @@
     .btn-ipad { background: var(--dopa-yellow); color: var(--dopa-dark); }
     .btn-fire { background: var(--dopa-pink); color: #fff; }
 
-    /* 寬版主容器：滿版寬度自適應大螢幕 */
+    /* 寬版主容器 */
     .view-container { 
       display: none; 
       padding: 20px 24px; 
@@ -131,7 +131,7 @@
       background: #fafafa;
     }
 
-    /* 寬螢幕三欄比例調整：勝部(1.6fr) 給予極度充裕寬度，名字絕不換行 */
+    /* 三欄超寬面板 */
     .arena-dashboard {
       display: grid;
       grid-template-columns: 1.65fr 1.15fr 1fr;
@@ -161,19 +161,32 @@
     }
 
     /* 對戰卡片：強化不換行 (nowrap) 與彈性配置 */
+    .match-list-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 750px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
     .match-item {
       background: #f8fafc;
       border: 3.5px solid var(--dopa-dark);
       border-radius: 18px;
       padding: 12px 18px;
-      margin-bottom: 12px;
       box-shadow: 0 4px 0 var(--dopa-dark);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      white-space: nowrap; /* 強制不折行 */
+      white-space: nowrap;
       overflow: hidden;
+      animation: popIn 0.3s ease-out;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
     .match-item.done {
       background: #e6fffa;
@@ -205,7 +218,7 @@
       font-weight: 900;
       padding: 4px 10px;
       border-radius: 10px;
-      white-space: nowrap; /* 名字絕對不跳行 */
+      white-space: nowrap;
       display: inline-block;
     }
     .p-tag.winner-mark {
@@ -242,9 +255,9 @@
       box-shadow: 0 4px 0 var(--dopa-dark);
       white-space: nowrap;
     }
-    .rank-row:nth-child(1) { background: #fff9c4; font-size: 20px; } /* 金 */
-    .rank-row:nth-child(2) { background: #e0f2fe; } /* 銀 */
-    .rank-row:nth-child(3) { background: #ffedd5; } /* 銅 */
+    .rank-row:nth-child(1) { background: #fff9c4; font-size: 20px; }
+    .rank-row:nth-child(2) { background: #e0f2fe; }
+    .rank-row:nth-child(3) { background: #ffedd5; }
     .score-badge {
       background: var(--dopa-pink);
       color: #fff;
@@ -444,7 +457,7 @@
 
   <!-- 頂部多巴胺列 -->
   <header>
-    <div class="brand-title">👑 我是全能拼字王！</div>
+    <div class="brand-title">👑 我是全能拼字王！無限輪轉爭霸賽</div>
     <div class="nav-btns">
       <button class="btn btn-screen" onclick="switchView('hostView')">🖥️ 大螢幕對戰首頁</button>
       <button class="btn btn-ipad" onclick="switchView('playerLoginView')">📱 學生 iPad 對戰端</button>
@@ -459,7 +472,7 @@
         <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
         <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
         <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
-        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（勝部或復活戰獲勝皆得 +2 分！）</span>
+        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（勝部或復活戰打贏皆得 +2 分並不斷開戰！）</span>
       </div>
 
       <div style="font-weight:900; font-size:18px; margin-bottom:8px;">👥 參賽同學名單（座號或姓名）：</div>
@@ -473,28 +486,28 @@
 
     <!-- 三欄超寬面板 -->
     <div class="arena-dashboard">
-      <!-- 勝部賽程 -->
+      <!-- 左側：主對決戰局（勝部 + 復活回歸的全新戰局） -->
       <div class="box-card">
         <div class="box-header">
-          <span>🏆 勝部大對決</span>
-          <span style="font-size:14px; color:#10b981;">● 即時同步中</span>
+          <span>🏆 主戰局對決區 (持續輪轉開打)</span>
+          <span style="font-size:14px; color:#10b981;">● 即時配對中</span>
         </div>
-        <div id="mainBracketList">
+        <div class="match-list-scroll" id="mainBracketList">
           <p style="color:#94a3b8; font-weight:800; font-size:17px;">點選上方「隨機分組」即刻點燃戰火！</p>
         </div>
       </div>
 
-      <!-- 敗部復活賽程 -->
+      <!-- 中間：敗部復活區 -->
       <div class="box-card">
         <div class="box-header">
-          <span style="color:var(--dopa-pink);">🔥 敗部復活爭霸區</span>
+          <span style="color:var(--dopa-pink);">🔥 敗部復活區 (獲勝回歸主戰局)</span>
         </div>
-        <div id="redemptionBracketList">
-          <p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後，落敗選手將自動依序排入復活戰！</p>
+        <div class="match-list-scroll" id="redemptionBracketList">
+          <p style="color:#94a3b8; font-weight:800; font-size:17px;">落敗選手將自動依序排入復活戰，贏了立刻殺回左邊！</p>
         </div>
       </div>
 
-      <!-- 積分排行榜 -->
+      <!-- 右側：積分排行榜 -->
       <div class="box-card" style="background: #fffcf2;">
         <div class="box-header">
           <span style="color:var(--dopa-purple);">👑 全班積分排行榜</span>
@@ -512,7 +525,7 @@
     <h2 style="font-size:32px; font-weight:900; color:var(--dopa-pink); margin-bottom:10px;">👑 我是全能拼字王！</h2>
     <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看黑板上的桌號並輸入：</p>
     
-    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (輸入數字，如 1、2、10、20... 或復活桌 R1、R2...)</label>
+    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (輸入數字，如 1、2、10... 或復活桌 R1、R2...)</label>
     <input type="text" id="tblNumber" class="dopa-input" value="1" placeholder="例如：1 或 R1">
 
     <label style="font-weight:900; font-size:18px;">選擇你的站位</label>
@@ -526,7 +539,6 @@
 
   <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
   <div id="arenaView">
-    <!-- 上方紅方選手 (180 度反轉，對面看完全正向) -->
     <div class="player-zone p1-up">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
@@ -537,14 +549,12 @@
       <div class="keyboard-wrapper" id="p1KeyboardArea"></div>
     </div>
 
-    <!-- 中央巨大多巴胺拔河槽 -->
     <div class="arena-divider">
       <div class="giant-rope">
         <div class="bow-ribbon" id="bowRibbon"></div>
       </div>
     </div>
 
-    <!-- 下方藍方選手 (正常視角) -->
     <div class="player-zone p2-down">
       <div class="p-status-bar">
         <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
@@ -635,7 +645,7 @@
     }
 
     // ==========================================
-    // 🖥️ 教師大螢幕邏輯：解除桌數限制與防折行渲染
+    // 🖥️ 教師大螢幕邏輯：動態滾動輪轉配對
     // ==========================================
     function startTournament() {
       const raw = document.getElementById('studentListInput').value;
@@ -655,21 +665,23 @@
       for (let i = 0; i < shuffled.length; i += 2) {
         if (i + 1 < shuffled.length) {
           matches[`match_${tableCount}`] = {
-            table: tableCount,
+            table: `${tableCount}`,
             p1: shuffled[i],
             p2: shuffled[i+1],
-            winner: null
+            winner: null,
+            round: 1
           };
           tableCount++;
         } else {
-          // 若人數為單數，最後一位同學直接晉級免戰輪空並獲得 2 分
-          const luckyStudent = shuffled[i];
-          initialScores[luckyStudent] = 2;
+          // 單數輪空直接加 2 分
+          const lucky = shuffled[i];
+          initialScores[lucky] = 2;
           matches[`match_${tableCount}`] = {
-            table: tableCount,
-            p1: luckyStudent,
+            table: `${tableCount}`,
+            p1: lucky,
             p2: "（輪空保送）",
-            winner: luckyStudent
+            winner: lucky,
+            round: 1
           };
         }
       }
@@ -678,6 +690,9 @@
         matches: matches,
         scores: initialScores,
         redemption: {},
+        mainWaitingPool: [], // 勝部或復活打贏後等待配對的人
+        loserWaitingPool: [], // 剛輸掉等待進復活賽的人
+        maxTableNumber: tableCount,
         settings: { scope: selectedLessons }
       });
     }
@@ -688,27 +703,39 @@
       }
     }
 
-    // 監聽雲端資料庫
+    // 監聽雲端並動態維護「無限輪轉配對」
     db.ref('tournament').on('value', (snap) => {
       const data = snap.val();
       if (!data) {
         document.getElementById('mainBracketList').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">點選上方「隨機分組」即刻點燃戰火！</p>';
-        document.getElementById('redemptionBracketList').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後，落敗選手將自動依序排入復活戰！</p>';
+        document.getElementById('redemptionBracketList').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">落敗選手將自動依序排入復活戰，贏了立刻殺回左邊！</p>';
         document.getElementById('leaderboardView').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後即時計分...</p>';
         return;
       }
 
-      // 1. 渲染勝部（依照桌號數值由小到大精準排序）
+      // 1. 渲染左側主戰場
+      renderMainMatches(data.matches || {});
+
+      // 2. 渲染中間敗部復活戰場
+      renderRedemptionMatches(data.redemption || {});
+
+      // 3. 渲染右側積分榜
+      renderLeaderboard(data.scores || {});
+    });
+
+    function renderMainMatches(matches) {
       const mainList = document.getElementById('mainBracketList');
       mainList.innerHTML = '';
-      const matches = data.matches || {};
       const matchKeys = Object.keys(matches).sort((a, b) => {
         const numA = parseInt(a.replace('match_', ''), 10) || 0;
         const numB = parseInt(b.replace('match_', ''), 10) || 0;
-        return numA - numB;
+        return numB - numA; // 最新的戰局置頂，方便學生查看
       });
 
-      const losers = [];
+      if (matchKeys.length === 0) {
+        mainList.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">戰局等待中...</p>';
+        return;
+      }
 
       matchKeys.forEach(k => {
         const m = matches[k];
@@ -726,70 +753,40 @@
           </span>
         `;
         mainList.appendChild(card);
-
-        if (m.winner && m.p2 !== "（輪空保送）") {
-          const loser = (m.winner === m.p1) ? m.p2 : m.p1;
-          if (!losers.includes(loser)) losers.push(loser);
-        }
       });
+    }
 
-      // 2. 自動維護並渲染敗部復活對戰
-      syncAndRenderRedemption(losers, data.redemption || {});
-
-      // 3. 渲染積分排行榜
-      renderLeaderboard(data.scores || {});
-    });
-
-    // 敗部復活桌自動動態配對
-    function syncAndRenderRedemption(losers, currentRedemption) {
+    function renderRedemptionMatches(redemption) {
       const redElem = document.getElementById('redemptionBracketList');
       redElem.innerHTML = '';
+      const rKeys = Object.keys(redemption).sort((a, b) => {
+        const numA = parseInt(a.replace('match_R', ''), 10) || 0;
+        const numB = parseInt(b.replace('match_R', ''), 10) || 0;
+        return numB - numA;
+      });
 
-      if (losers.length < 2) {
-        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">等待兩位落敗選手就位後自動組成復活桌...</p>';
+      if (rKeys.length === 0) {
+        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">目前全員在主戰場！落敗選手將自動依序排入復活戰...</p>';
         return;
       }
 
-      // 每兩位落敗者配對成一桌
-      const updatedRedemption = { ...currentRedemption };
-      let needUpdate = false;
-
-      for (let i = 0; i < losers.length; i += 2) {
-        if (i + 1 < losers.length) {
-          const rTable = Math.floor(i / 2) + 1;
-          const rKey = `match_R${rTable}`;
-
-          if (!updatedRedemption[rKey]) {
-            updatedRedemption[rKey] = {
-              table: `R${rTable}`,
-              p1: losers[i],
-              p2: losers[i + 1],
-              winner: null
-            };
-            needUpdate = true;
-          }
-
-          const rm = updatedRedemption[rKey];
-          const card = document.createElement('div');
-          card.className = `match-item ${rm.winner ? 'done' : ''}`;
-          card.innerHTML = `
-            <span class="table-badge-ui" style="background:#ffc0d3;">復活桌 ${rm.table}</span>
-            <div class="vs-wrap">
-              <span class="p-tag ${rm.winner === rm.p1 ? 'winner-mark' : ''}">🔥 ${rm.p1}</span>
-              <span style="font-size:16px; font-weight:900; color:#94a3b8;">VS</span>
-              <span class="p-tag ${rm.winner === rm.p2 ? 'winner-mark' : ''}">🔥 ${rm.p2}</span>
-            </div>
-            <span class="match-status-label" style="color:${rm.winner ? '#059669':'var(--dopa-pink)'};">
-              ${rm.winner ? '🎉 ' + rm.winner + ' 復活 (+2分)' : '爭奪 +2 復活分！'}
-            </span>
-          `;
-          redElem.appendChild(card);
-        }
-      }
-
-      if (needUpdate) {
-        db.ref('tournament/redemption').set(updatedRedemption);
-      }
+      rKeys.forEach(k => {
+        const rm = redemption[k];
+        const card = document.createElement('div');
+        card.className = `match-item ${rm.winner ? 'done' : ''}`;
+        card.innerHTML = `
+          <span class="table-badge-ui" style="background:#ffc0d3;">復活桌 ${rm.table}</span>
+          <div class="vs-wrap">
+            <span class="p-tag ${rm.winner === rm.p1 ? 'winner-mark' : ''}">🔥 ${rm.p1}</span>
+            <span style="font-size:16px; font-weight:900; color:#94a3b8;">VS</span>
+            <span class="p-tag ${rm.winner === rm.p2 ? 'winner-mark' : ''}">🔥 ${rm.p2}</span>
+          </div>
+          <span class="match-status-label" style="color:${rm.winner ? '#059669':'var(--dopa-pink)'};">
+            ${rm.winner ? '🔥 ' + rm.winner + ' 成功復活回歸左邊！(+2分)' : '贏家立刻回歸左側主戰局！'}
+          </span>
+        `;
+        redElem.appendChild(card);
+      });
     }
 
     function renderLeaderboard(scores) {
@@ -815,10 +812,10 @@
     }
 
     // ==========================================
-    // 📱 學生 iPad 對戰邏輯：支援任意桌號 (數字或 R 開頭)
+    // 📱 學生 iPad 對戰與智慧排程系統
     // ==========================================
     let activeTableCode = "1";
-    let activeMatchPath = "";
+    let isRedemptionMatch = false;
     let matchInfo = null;
     let tugState = 0;
     const p1 = { typed: '', target: null };
@@ -832,15 +829,20 @@
       }
 
       activeTableCode = inputVal.toUpperCase();
-      // 判斷是一般桌號還是復活桌
-      activeMatchPath = activeTableCode.startsWith('R') 
+      isRedemptionMatch = activeTableCode.startsWith('R');
+      const activeMatchPath = isRedemptionMatch 
         ? `tournament/redemption/match_${activeTableCode}` 
         : `tournament/matches/match_${activeTableCode}`;
 
       db.ref(activeMatchPath).once('value', (snap) => {
         matchInfo = snap.val();
         if (!matchInfo) {
-          alert(`找不到【${activeTableCode}】的對戰資訊！請確認大螢幕是否已完成分組。`);
+          alert(`找不到【${activeTableCode}】的對戰資訊！請確認大螢幕上是否有此桌。`);
+          return;
+        }
+
+        if (matchInfo.winner) {
+          alert(`這桌（${activeTableCode}）已經分出勝負囉！請查看大螢幕找新桌號。`);
           return;
         }
 
@@ -940,11 +942,12 @@
 
             if (Math.abs(tugState) >= 5) {
               const winner = tugState <= -5 ? matchInfo.p1 : matchInfo.p2;
-              alert(`🎉 恭喜 ${winner} 拔河大獲全勝！勇奪 +2 分！`);
-
-              // 雲端回傳獲勝者與加 2 分
-              db.ref(activeMatchPath).update({ winner: winner });
-              db.ref(`tournament/scores/${winner}`).transaction((cur) => (cur || 0) + 2);
+              const loser = (winner === matchInfo.p1) ? matchInfo.p2 : matchInfo.p1;
+              
+              alert(`🎉 恭喜 ${winner} 獲勝！勇奪 +2 分！\n結果已回傳，大螢幕將自動安排下一輪戰局！`);
+              
+              // 處理結果與自動配對
+              finishMatchAndAutoSchedule(winner, loser);
 
               document.getElementById('arenaView').style.display = 'none';
               switchView('playerLoginView');
@@ -956,6 +959,72 @@
         }
       }
       renderPlayerTiles(pId);
+    }
+
+    // 核心：分出勝負後的智慧動態排程機制
+    function finishMatchAndAutoSchedule(winner, loser) {
+      const activeMatchPath = isRedemptionMatch 
+        ? `tournament/redemption/match_${activeTableCode}` 
+        : `tournament/matches/match_${activeTableCode}`;
+
+      // 1. 標記當前戰局獲勝者，並在雲端 +2 分
+      db.ref(activeMatchPath).update({ winner: winner });
+      db.ref(`tournament/scores/${winner}`).transaction((cur) => (cur || 0) + 2);
+
+      // 2. 獲勝者進入「主戰場待配對池」（無論來自勝部還是剛從敗部復活！）
+      //    只要滿 2 人，立刻在左邊主戰區生成一桌新對決！
+      db.ref('tournament').transaction((currentData) => {
+        if (!currentData) return currentData;
+
+        let mainWaiting = currentData.mainWaitingPool || [];
+        let loserWaiting = currentData.loserWaitingPool || [];
+        let matches = currentData.matches || {};
+        let redemption = currentData.redemption || {};
+        let maxTable = currentData.maxTableNumber || 100;
+
+        // --- 處理贏家（重返左邊主戰場）---
+        if (!mainWaiting.includes(winner)) {
+          mainWaiting.push(winner);
+        }
+
+        if (mainWaiting.length >= 2) {
+          const pA = mainWaiting.shift();
+          const pB = mainWaiting.shift();
+          maxTable++;
+          matches[`match_${maxTable}`] = {
+            table: `${maxTable}`,
+            p1: pA,
+            p2: pB,
+            winner: null
+          };
+        }
+
+        // --- 處理輸家（進入敗部復活戰）---
+        // 如果是在復活賽又輸了，依舊讓他留在敗部池繼續找其他同學對決，無限重玩！
+        if (!loserWaiting.includes(loser)) {
+          loserWaiting.push(loser);
+        }
+
+        if (loserWaiting.length >= 2) {
+          const lA = loserWaiting.shift();
+          const lB = loserWaiting.shift();
+          const rCount = Object.keys(redemption).length + 1;
+          redemption[`match_R${rCount}`] = {
+            table: `R${rCount}`,
+            p1: lA,
+            p2: lB,
+            winner: null
+          };
+        }
+
+        currentData.mainWaitingPool = mainWaiting;
+        currentData.loserWaitingPool = loserWaiting;
+        currentData.matches = matches;
+        currentData.redemption = redemption;
+        currentData.maxTableNumber = maxTable;
+
+        return currentData;
+      });
     }
 
     function refreshRope() {
