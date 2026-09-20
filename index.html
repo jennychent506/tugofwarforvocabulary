@@ -43,7 +43,7 @@
     /* 頂部多巴胺色彩條 */
     header {
       background: #ffffff;
-      padding: 16px 28px;
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -51,7 +51,7 @@
       box-shadow: 0 6px 0 rgba(0,0,0,0.1);
     }
     .brand-title {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 900;
       color: var(--dopa-pink);
       text-shadow: 3px 3px 0 var(--dopa-yellow), 5px 5px 0 var(--dopa-dark);
@@ -59,10 +59,10 @@
     }
     .nav-btns { display: flex; gap: 12px; }
     .btn {
-      border: 3px solid var(--dopa-dark);
+      border: 3.5px solid var(--dopa-dark);
       padding: 10px 24px;
       border-radius: 50px;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       font-size: 18px;
       box-shadow: 0 5px 0 var(--dopa-dark);
@@ -76,8 +76,14 @@
     .btn-ipad { background: var(--dopa-yellow); color: var(--dopa-dark); }
     .btn-fire { background: var(--dopa-pink); color: #fff; }
 
-    /* 視圖控制 */
-    .view-container { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+    /* 寬版主容器：滿版寬度自適應大螢幕 */
+    .view-container { 
+      display: none; 
+      padding: 20px 24px; 
+      width: 98%; 
+      max-width: 1800px; 
+      margin: 0 auto; 
+    }
     .view-container.active { display: block; }
 
     /* ====== 大螢幕模式 (Home) ====== */
@@ -85,23 +91,23 @@
       background: #ffffff;
       border: 4px solid var(--dopa-dark);
       border-radius: 24px;
-      padding: 22px 30px;
-      margin-bottom: 24px;
+      padding: 20px 28px;
+      margin-bottom: 20px;
       box-shadow: 8px 8px 0 var(--dopa-dark);
     }
     .scope-selector {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       flex-wrap: wrap;
     }
     .scope-chip {
-      padding: 10px 22px;
+      padding: 8px 20px;
       border: 3px solid var(--dopa-dark);
       border-radius: 30px;
       font-weight: 900;
-      font-size: 18px;
+      font-size: 17px;
       cursor: pointer;
       background: #f1f5f9;
       box-shadow: 0 4px 0 var(--dopa-dark);
@@ -118,20 +124,21 @@
       height: 70px;
       border: 3px solid var(--dopa-dark);
       border-radius: 16px;
-      padding: 12px 16px;
-      font-size: 18px;
+      padding: 10px 16px;
+      font-size: 17px;
       font-weight: 800;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       background: #fafafa;
     }
 
-    /* 三欄大版面：勝部賽程、敗部賽程、即時排行榜 */
+    /* 寬螢幕三欄比例調整：勝部(1.6fr) 給予極度充裕寬度，名字絕不換行 */
     .arena-dashboard {
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 22px;
+      grid-template-columns: 1.65fr 1.15fr 1fr;
+      gap: 20px;
+      align-items: start;
     }
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       .arena-dashboard { grid-template-columns: 1fr; }
     }
 
@@ -139,13 +146,13 @@
       background: #ffffff;
       border: 4px solid var(--dopa-dark);
       border-radius: 22px;
-      padding: 22px;
+      padding: 20px;
       box-shadow: 6px 6px 0 var(--dopa-dark);
     }
     .box-header {
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       font-weight: 900;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -153,59 +160,97 @@
       border-bottom: 3px dashed #cbd5e1;
     }
 
+    /* 對戰卡片：強化不換行 (nowrap) 與彈性配置 */
     .match-item {
       background: #f8fafc;
-      border: 3px solid var(--dopa-dark);
-      border-radius: 16px;
-      padding: 14px 18px;
-      margin-bottom: 14px;
+      border: 3.5px solid var(--dopa-dark);
+      border-radius: 18px;
+      padding: 12px 18px;
+      margin-bottom: 12px;
       box-shadow: 0 4px 0 var(--dopa-dark);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      white-space: nowrap; /* 強制不折行 */
+      overflow: hidden;
     }
     .match-item.done {
       background: #e6fffa;
       border-color: #059669;
     }
+
+    .table-badge-ui {
+      font-weight: 900;
+      background: var(--dopa-yellow);
+      padding: 6px 14px;
+      border-radius: 12px;
+      border: 3px solid var(--dopa-dark);
+      font-size: 17px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .vs-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      flex-shrink: 1;
+    }
+
     .p-tag {
       font-size: 19px;
       font-weight: 900;
-      padding: 6px 12px;
+      padding: 4px 10px;
       border-radius: 10px;
+      white-space: nowrap; /* 名字絕對不跳行 */
+      display: inline-block;
     }
     .p-tag.winner-mark {
       background: var(--dopa-green);
       border: 2px solid var(--dopa-dark);
     }
 
+    .match-status-label {
+      font-size: 16px;
+      font-weight: 900;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     /* 得分排行榜清單 */
     .leaderboard-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      max-height: 750px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
     .rank-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 18px;
-      border-radius: 16px;
+      padding: 10px 16px;
+      border-radius: 14px;
       border: 3px solid var(--dopa-dark);
       background: #fff;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 900;
       box-shadow: 0 4px 0 var(--dopa-dark);
+      white-space: nowrap;
     }
-    .rank-row:nth-child(1) { background: #fff9c4; font-size: 21px; } /* 金 */
+    .rank-row:nth-child(1) { background: #fff9c4; font-size: 20px; } /* 金 */
     .rank-row:nth-child(2) { background: #e0f2fe; } /* 銀 */
     .rank-row:nth-child(3) { background: #ffedd5; } /* 銅 */
     .score-badge {
       background: var(--dopa-pink);
       color: #fff;
-      padding: 6px 14px;
+      padding: 4px 12px;
       border-radius: 20px;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 900;
     }
 
@@ -247,7 +292,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 16px 24px;
+      padding: 14px 24px;
       position: relative;
     }
     .player-zone.p1-up {
@@ -260,7 +305,6 @@
       border-top: 5px solid var(--dopa-dark);
     }
 
-    /* 頂部選手資訊卡片（字體特大化：28px） */
     .p-status-bar {
       display: flex;
       justify-content: space-between;
@@ -269,7 +313,7 @@
     .p-name-badge {
       font-size: 26px;
       font-weight: 900;
-      padding: 8px 22px;
+      padding: 6px 20px;
       border-radius: 50px;
       border: 4px solid var(--dopa-dark);
       box-shadow: 0 4px 0 var(--dopa-dark);
@@ -277,38 +321,36 @@
     .p-name-badge.red { background: var(--dopa-pink); color: #fff; }
     .p-name-badge.blue { background: var(--dopa-blue); color: var(--dopa-dark); }
 
-    /* 題目定義區（字體特大化：32px） */
     .word-def-box {
       text-align: center;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 900;
       color: var(--dopa-dark);
       background: #ffffff;
       border: 4px solid var(--dopa-dark);
       border-radius: 20px;
-      padding: 12px 20px;
+      padding: 10px 18px;
       box-shadow: 0 6px 0 var(--dopa-dark);
       max-width: 900px;
       margin: 4px auto;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
-    /* 拼字格子區（字體特大化：方塊 46x58px，文字 34px） */
     .slots-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      min-height: 60px;
-      margin: 6px 0;
+      min-height: 56px;
+      margin: 4px 0;
     }
     .tile {
-      width: 46px;
-      height: 58px;
-      border: 4px solid var(--dopa-dark);
+      width: 44px;
+      height: 54px;
+      border: 3.5px solid var(--dopa-dark);
       border-radius: 12px;
       background: #ffffff;
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 900;
       display: flex;
       align-items: center;
@@ -326,10 +368,9 @@
       border: none;
       background: transparent;
       box-shadow: none;
-      width: 22px;
+      width: 20px;
     }
 
-    /* 多巴胺鍵盤（大按鍵 54px 高，文字 26px） */
     .keyboard-wrapper {
       max-width: 840px;
       margin: 0 auto;
@@ -338,12 +379,12 @@
     .key-row {
       display: flex;
       justify-content: center;
-      gap: 7px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 5px;
     }
     .dopa-key {
       flex: 1;
-      height: 54px;
+      height: 52px;
       max-width: 66px;
       border: 3.5px solid var(--dopa-dark);
       border-radius: 14px;
@@ -361,14 +402,13 @@
     }
     .dopa-key.action-btn {
       flex: 1.6;
-      max-width: 96px;
+      max-width: 94px;
       font-size: 18px;
       background: #ffd3b6;
     }
 
-    /* 中央巨大拔河槽 */
     .arena-divider {
-      height: 72px;
+      height: 68px;
       background: var(--dopa-yellow);
       border-top: 5px solid var(--dopa-dark);
       border-bottom: 5px solid var(--dopa-dark);
@@ -376,11 +416,10 @@
       align-items: center;
       position: relative;
       padding: 0 30px;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
     }
     .giant-rope {
       width: 100%;
-      height: 20px;
+      height: 18px;
       background: #a16207;
       border: 3.5px solid var(--dopa-dark);
       border-radius: 999px;
@@ -389,8 +428,8 @@
     .bow-ribbon {
       position: absolute;
       width: 36px;
-      height: 52px;
-      top: -18px;
+      height: 50px;
+      top: -16px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--dopa-pink);
@@ -416,7 +455,7 @@
   <div id="hostView" class="view-container active">
     <div class="admin-card">
       <div class="scope-selector">
-        <span style="font-weight:900; font-size:20px;">🎯 本次對戰範圍：</span>
+        <span style="font-weight:900; font-size:19px;">🎯 本次對戰範圍：</span>
         <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
         <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
         <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
@@ -432,7 +471,7 @@
       </div>
     </div>
 
-    <!-- 三欄面板 -->
+    <!-- 三欄超寬面板 -->
     <div class="arena-dashboard">
       <!-- 勝部賽程 -->
       <div class="box-card">
@@ -451,7 +490,7 @@
           <span style="color:var(--dopa-pink);">🔥 敗部復活爭霸區</span>
         </div>
         <div id="redemptionBracketList">
-          <p style="color:#94a3b8; font-weight:800; font-size:17px;">第一輪落敗選手將進入此區爭奪復活積分！</p>
+          <p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後，落敗選手將自動依序排入復活戰！</p>
         </div>
       </div>
 
@@ -473,8 +512,8 @@
     <h2 style="font-size:32px; font-weight:900; color:var(--dopa-pink); margin-bottom:10px;">👑 我是全能拼字王！</h2>
     <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看黑板上的桌號並輸入：</p>
     
-    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (Table #)</label>
-    <input type="number" id="tblNumber" class="dopa-input" value="1">
+    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (輸入數字，如 1、2、10、20... 或復活桌 R1、R2...)</label>
+    <input type="text" id="tblNumber" class="dopa-input" value="1" placeholder="例如：1 或 R1">
 
     <label style="font-weight:900; font-size:18px;">選擇你的站位</label>
     <select id="playerSide" class="dopa-input">
@@ -520,7 +559,6 @@
   <script>
     // ==========================================
     // ⚙️ 1. FIREBASE 雲端即時連線設定
-    // 請確認下方 databaseURL 替換為您的 Realtime Database 網址
     // ==========================================
     const firebaseConfig = {
       databaseURL: "https://vocab-tournament-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -528,7 +566,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 完整三課單字片語庫
+    // 完整三課單字片語資料庫
     const FULL_DICTIONARY = {
       L1: [
         { word: "after all", def: "畢竟" }, { word: "be about to", def: "即將；正要" }, { word: "cheer up", def: "使......振奮、高興" },
@@ -597,11 +635,11 @@
     }
 
     // ==========================================
-    // 🖥️ 教師大螢幕邏輯：生成分組與雲端監聽
+    // 🖥️ 教師大螢幕邏輯：解除桌數限制與防折行渲染
     // ==========================================
     function startTournament() {
       const raw = document.getElementById('studentListInput').value;
-      const names = raw.split(/[\n,]+/).map(s => s.trim()).filter(s => s);
+      const names = raw.split(/[\n,，]+/).map(s => s.trim()).filter(s => s);
       if (names.length < 2) {
         alert("請至少輸入兩位同學名單！");
         return;
@@ -623,12 +661,23 @@
             winner: null
           };
           tableCount++;
+        } else {
+          // 若人數為單數，最後一位同學直接晉級免戰輪空並獲得 2 分
+          const luckyStudent = shuffled[i];
+          initialScores[luckyStudent] = 2;
+          matches[`match_${tableCount}`] = {
+            table: tableCount,
+            p1: luckyStudent,
+            p2: "（輪空保送）",
+            winner: luckyStudent
+          };
         }
       }
 
       db.ref('tournament').set({
         matches: matches,
         scores: initialScores,
+        redemption: {},
         settings: { scope: selectedLessons }
       });
     }
@@ -639,71 +688,107 @@
       }
     }
 
-    // 監聽對戰與比分
+    // 監聽雲端資料庫
     db.ref('tournament').on('value', (snap) => {
       const data = snap.val();
-      if (!data) return;
+      if (!data) {
+        document.getElementById('mainBracketList').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">點選上方「隨機分組」即刻點燃戰火！</p>';
+        document.getElementById('redemptionBracketList').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後，落敗選手將自動依序排入復活戰！</p>';
+        document.getElementById('leaderboardView').innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">比賽開始後即時計分...</p>';
+        return;
+      }
 
-      // 1. 渲染勝部
+      // 1. 渲染勝部（依照桌號數值由小到大精準排序）
       const mainList = document.getElementById('mainBracketList');
       mainList.innerHTML = '';
       const matches = data.matches || {};
+      const matchKeys = Object.keys(matches).sort((a, b) => {
+        const numA = parseInt(a.replace('match_', ''), 10) || 0;
+        const numB = parseInt(b.replace('match_', ''), 10) || 0;
+        return numA - numB;
+      });
+
       const losers = [];
 
-      Object.keys(matches).forEach(k => {
+      matchKeys.forEach(k => {
         const m = matches[k];
         const card = document.createElement('div');
         card.className = `match-item ${m.winner ? 'done' : ''}`;
         card.innerHTML = `
-          <span style="font-weight:900; background:#fde047; padding:6px 12px; border-radius:10px; border:2.5px solid #000; font-size:17px;">第 ${m.table} 桌</span>
-          <div>
+          <span class="table-badge-ui">第 ${m.table} 桌</span>
+          <div class="vs-wrap">
             <span class="p-tag ${m.winner === m.p1 ? 'winner-mark' : ''}">🔴 ${m.p1}</span>
-            <span style="font-size:16px; font-weight:900; color:#94a3b8; margin:0 8px;">VS</span>
+            <span style="font-size:16px; font-weight:900; color:#94a3b8;">VS</span>
             <span class="p-tag ${m.winner === m.p2 ? 'winner-mark' : ''}">🔵 ${m.p2}</span>
           </div>
-          <span style="font-size:17px; font-weight:900; color:${m.winner ? '#059669':'#e11d48'};">
+          <span class="match-status-label" style="color:${m.winner ? '#059669':'#e11d48'};">
             ${m.winner ? '🎉 ' + m.winner + ' 勝出 (+2分)' : '⚔️ 對決中'}
           </span>
         `;
         mainList.appendChild(card);
 
-        if (m.winner) {
+        if (m.winner && m.p2 !== "（輪空保送）") {
           const loser = (m.winner === m.p1) ? m.p2 : m.p1;
           if (!losers.includes(loser)) losers.push(loser);
         }
       });
 
-      // 2. 渲染敗部復活區
-      renderRedemption(losers, data.redemption || {});
+      // 2. 自動維護並渲染敗部復活對戰
+      syncAndRenderRedemption(losers, data.redemption || {});
 
-      // 3. 渲染排行榜
+      // 3. 渲染積分排行榜
       renderLeaderboard(data.scores || {});
     });
 
-    function renderRedemption(losers, redemptionMatches) {
+    // 敗部復活桌自動動態配對
+    function syncAndRenderRedemption(losers, currentRedemption) {
       const redElem = document.getElementById('redemptionBracketList');
       redElem.innerHTML = '';
-      if (losers.length === 0) {
-        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">第一輪落敗選手將進入此區爭奪復活積分！</p>';
+
+      if (losers.length < 2) {
+        redElem.innerHTML = '<p style="color:#94a3b8; font-weight:800; font-size:17px;">等待兩位落敗選手就位後自動組成復活桌...</p>';
         return;
       }
 
+      // 每兩位落敗者配對成一桌
+      const updatedRedemption = { ...currentRedemption };
+      let needUpdate = false;
+
       for (let i = 0; i < losers.length; i += 2) {
         if (i + 1 < losers.length) {
-          const tId = Math.floor(i/2) + 1;
+          const rTable = Math.floor(i / 2) + 1;
+          const rKey = `match_R${rTable}`;
+
+          if (!updatedRedemption[rKey]) {
+            updatedRedemption[rKey] = {
+              table: `R${rTable}`,
+              p1: losers[i],
+              p2: losers[i + 1],
+              winner: null
+            };
+            needUpdate = true;
+          }
+
+          const rm = updatedRedemption[rKey];
           const card = document.createElement('div');
-          card.className = 'match-item';
+          card.className = `match-item ${rm.winner ? 'done' : ''}`;
           card.innerHTML = `
-            <span style="font-weight:900; background:#ffc0d3; padding:6px 12px; border-radius:10px; border:2.5px solid #000; font-size:17px;">復活桌 R${tId}</span>
-            <div>
-              <span class="p-tag">🔥 ${losers[i]}</span>
-              <span style="font-size:16px; font-weight:900; color:#94a3b8; margin:0 8px;">VS</span>
-              <span class="p-tag">🔥 ${losers[i+1]}</span>
+            <span class="table-badge-ui" style="background:#ffc0d3;">復活桌 ${rm.table}</span>
+            <div class="vs-wrap">
+              <span class="p-tag ${rm.winner === rm.p1 ? 'winner-mark' : ''}">🔥 ${rm.p1}</span>
+              <span style="font-size:16px; font-weight:900; color:#94a3b8;">VS</span>
+              <span class="p-tag ${rm.winner === rm.p2 ? 'winner-mark' : ''}">🔥 ${rm.p2}</span>
             </div>
-            <span style="font-size:16px; font-weight:900; color:var(--dopa-pink);">爭奪 +2 復活分！</span>
+            <span class="match-status-label" style="color:${rm.winner ? '#059669':'var(--dopa-pink)'};">
+              ${rm.winner ? '🎉 ' + rm.winner + ' 復活 (+2分)' : '爭奪 +2 復活分！'}
+            </span>
           `;
           redElem.appendChild(card);
         }
+      }
+
+      if (needUpdate) {
+        db.ref('tournament/redemption').set(updatedRedemption);
       }
     }
 
@@ -730,20 +815,32 @@
     }
 
     // ==========================================
-    // 📱 學生 iPad 對戰邏輯
+    // 📱 學生 iPad 對戰邏輯：支援任意桌號 (數字或 R 開頭)
     // ==========================================
-    let currentTable = 1;
+    let activeTableCode = "1";
+    let activeMatchPath = "";
     let matchInfo = null;
     let tugState = 0;
     const p1 = { typed: '', target: null };
     const p2 = { typed: '', target: null };
 
     function enterBattle() {
-      currentTable = document.getElementById('tblNumber').value;
-      db.ref(`tournament/matches/match_${currentTable}`).once('value', (snap) => {
+      const inputVal = document.getElementById('tblNumber').value.trim();
+      if (!inputVal) {
+        alert("請輸入桌號！");
+        return;
+      }
+
+      activeTableCode = inputVal.toUpperCase();
+      // 判斷是一般桌號還是復活桌
+      activeMatchPath = activeTableCode.startsWith('R') 
+        ? `tournament/redemption/match_${activeTableCode}` 
+        : `tournament/matches/match_${activeTableCode}`;
+
+      db.ref(activeMatchPath).once('value', (snap) => {
         matchInfo = snap.val();
         if (!matchInfo) {
-          alert(`找不到桌號 ${currentTable} 的對戰資訊！請確認大螢幕是否已完成分組。`);
+          alert(`找不到【${activeTableCode}】的對戰資訊！請確認大螢幕是否已完成分組。`);
           return;
         }
 
@@ -751,7 +848,7 @@
         document.getElementById('p1NameTag').innerText = `🔴 ${matchInfo.p1}`;
         document.getElementById('p2NameTag').innerText = `🔵 ${matchInfo.p2}`;
 
-        // 讀取老師設定的出題範圍
+        // 讀取出題範圍
         db.ref('tournament/settings/scope').once('value', (scSnap) => {
           const scope = scSnap.val() || ['L1', 'L2', 'L3'];
           buildPool(scope);
@@ -771,6 +868,7 @@
     }
 
     function initArena() {
+      tugState = 0;
       renderKeys('p1KeyboardArea', 1);
       renderKeys('p2KeyboardArea', 2);
       nextWord(1);
@@ -845,7 +943,7 @@
               alert(`🎉 恭喜 ${winner} 拔河大獲全勝！勇奪 +2 分！`);
 
               // 雲端回傳獲勝者與加 2 分
-              db.ref(`tournament/matches/match_${currentTable}`).update({ winner: winner });
+              db.ref(activeMatchPath).update({ winner: winner });
               db.ref(`tournament/scores/${winner}`).transaction((cur) => (cur || 0) + 2);
 
               document.getElementById('arenaView').style.display = 'none';
