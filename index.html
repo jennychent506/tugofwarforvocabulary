@@ -18,6 +18,7 @@
       --dopa-purple: #7928ca;
       --dopa-bg: #fff5ea;
       --dopa-dark: #181824;
+      --dopa-red: #ef4444;
     }
 
     * {
@@ -160,7 +161,6 @@
       border-bottom: 3px dashed #cbd5e1;
     }
 
-    /* 對戰卡片：強化不換行 (nowrap) 與彈性配置 */
     .match-list-scroll {
       display: flex;
       flex-direction: column;
@@ -307,6 +307,7 @@
       justify-content: space-between;
       padding: 14px 24px;
       position: relative;
+      transition: background 0.2s;
     }
     .player-zone.p1-up {
       transform: rotate(180deg);
@@ -316,6 +317,15 @@
     .player-zone.p2-down {
       background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 100%);
       border-top: 5px solid var(--dopa-dark);
+    }
+
+    /* 答錯防作弊冷凍狀態：鍵盤半透明鎖定 + 提示紅標 */
+    .player-zone.frozen {
+      filter: saturate(0.6);
+    }
+    .player-zone.frozen .keyboard-wrapper {
+      pointer-events: none;
+      opacity: 0.35;
     }
 
     .p-status-bar {
@@ -334,6 +344,24 @@
     .p-name-badge.red { background: var(--dopa-pink); color: #fff; }
     .p-name-badge.blue { background: var(--dopa-blue); color: var(--dopa-dark); }
 
+    /* 防作弊冷凍警告提示徽章 */
+    .freeze-badge {
+      display: none;
+      background: #ef4444;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      padding: 4px 16px;
+      border-radius: 30px;
+      border: 3px solid #000;
+      box-shadow: 0 3px 0 #000;
+      animation: blink 0.4s infinite alternate;
+    }
+    @keyframes blink {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
     .word-def-box {
       text-align: center;
       font-size: 30px;
@@ -347,6 +375,18 @@
       max-width: 900px;
       margin: 4px auto;
       line-height: 1.3;
+      transition: all 0.15s;
+    }
+    /* 答錯劇烈左右震動動畫 */
+    .shake-anim {
+      animation: shake 0.3s ease-in-out;
+      border-color: #ef4444 !important;
+      background: #ffe4e6 !important;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-12px); }
+      40%, 80% { transform: translateX(12px); }
     }
 
     .slots-row {
@@ -388,6 +428,7 @@
       max-width: 840px;
       margin: 0 auto;
       width: 100%;
+      transition: opacity 0.2s;
     }
     .key-row {
       display: flex;
@@ -472,7 +513,7 @@
         <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
         <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
         <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
-        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（勝部或復活戰打贏皆得 +2 分並不斷開戰！）</span>
+        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（防作弊啟用：按錯字母冷凍 1.2 秒 + 清空該字！）</span>
       </div>
 
       <div style="font-weight:900; font-size:18px; margin-bottom:8px;">👥 參賽同學名單（座號或姓名）：</div>
@@ -486,7 +527,7 @@
 
     <!-- 三欄超寬面板 -->
     <div class="arena-dashboard">
-      <!-- 左側：主對決戰局（勝部 + 復活回歸的全新戰局） -->
+      <!-- 左側：主對決戰局 -->
       <div class="box-card">
         <div class="box-header">
           <span>🏆 主戰局對決區 (持續輪轉開打)</span>
@@ -539,9 +580,11 @@
 
   <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
   <div id="arenaView">
-    <div class="player-zone p1-up">
+    <!-- 上方紅方選手 (180 度反轉) -->
+    <div class="player-zone p1-up" id="p1Zone">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
+        <span class="freeze-badge" id="p1FreezeTag">❄️ 猜錯冷凍中...</span>
         <span style="font-size:26px; font-weight:900;" id="p1StepLabel">拉動: 0</span>
       </div>
       <div class="word-def-box" id="p1Prompt">準備中...</div>
@@ -549,15 +592,18 @@
       <div class="keyboard-wrapper" id="p1KeyboardArea"></div>
     </div>
 
+    <!-- 中央巨大多巴胺拔河槽 -->
     <div class="arena-divider">
       <div class="giant-rope">
         <div class="bow-ribbon" id="bowRibbon"></div>
       </div>
     </div>
 
-    <div class="player-zone p2-down">
+    <!-- 下方藍方選手 (正常視角) -->
+    <div class="player-zone p2-down" id="p2Zone">
       <div class="p-status-bar">
         <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
+        <span class="freeze-badge" id="p2FreezeTag">❄️ 猜錯冷凍中...</span>
         <span style="font-size:26px; font-weight:900;" id="p2StepLabel">拉動: 0</span>
       </div>
       <div class="word-def-box" id="p2Prompt">準備中...</div>
@@ -690,8 +736,8 @@
         matches: matches,
         scores: initialScores,
         redemption: {},
-        mainWaitingPool: [], // 勝部或復活打贏後等待配對的人
-        loserWaitingPool: [], // 剛輸掉等待進復活賽的人
+        mainWaitingPool: [],
+        loserWaitingPool: [],
         maxTableNumber: tableCount,
         settings: { scope: selectedLessons }
       });
@@ -703,7 +749,7 @@
       }
     }
 
-    // 監聽雲端並動態維護「無限輪轉配對」
+    // 監聽雲端資料庫
     db.ref('tournament').on('value', (snap) => {
       const data = snap.val();
       if (!data) {
@@ -713,13 +759,8 @@
         return;
       }
 
-      // 1. 渲染左側主戰場
       renderMainMatches(data.matches || {});
-
-      // 2. 渲染中間敗部復活戰場
       renderRedemptionMatches(data.redemption || {});
-
-      // 3. 渲染右側積分榜
       renderLeaderboard(data.scores || {});
     });
 
@@ -729,7 +770,7 @@
       const matchKeys = Object.keys(matches).sort((a, b) => {
         const numA = parseInt(a.replace('match_', ''), 10) || 0;
         const numB = parseInt(b.replace('match_', ''), 10) || 0;
-        return numB - numA; // 最新的戰局置頂，方便學生查看
+        return numB - numA;
       });
 
       if (matchKeys.length === 0) {
@@ -812,14 +853,31 @@
     }
 
     // ==========================================
-    // 📱 學生 iPad 對戰與智慧排程系統
+    // 📱 學生 iPad 對戰 + 🛡️ 防作弊冷凍與退格懲罰系統
     // ==========================================
     let activeTableCode = "1";
     let isRedemptionMatch = false;
     let matchInfo = null;
     let tugState = 0;
-    const p1 = { typed: '', target: null };
-    const p2 = { typed: '', target: null };
+    const p1 = { typed: '', target: null, isFrozen: false };
+    const p2 = { typed: '', target: null, isFrozen: false };
+
+    // 音效合成（防作弊警示音與按鍵音）
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, type = 'sine', duration = 0.1) {
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
 
     function enterBattle() {
       const inputVal = document.getElementById('tblNumber').value.trim();
@@ -850,7 +908,6 @@
         document.getElementById('p1NameTag').innerText = `🔴 ${matchInfo.p1}`;
         document.getElementById('p2NameTag').innerText = `🔵 ${matchInfo.p2}`;
 
-        // 讀取出題範圍
         db.ref('tournament/settings/scope').once('value', (scSnap) => {
           const scope = scSnap.val() || ['L1', 'L2', 'L3'];
           buildPool(scope);
@@ -871,6 +928,8 @@
 
     function initArena() {
       tugState = 0;
+      p1.isFrozen = false;
+      p2.isFrozen = false;
       renderKeys('p1KeyboardArea', 1);
       renderKeys('p2KeyboardArea', 2);
       nextWord(1);
@@ -916,26 +975,38 @@
       }
     }
 
+    // 核心鍵盤輸入處理與防作弊處罰
     function pressKey(pId, key) {
       if (Math.abs(tugState) >= 5) return;
       const state = pId === 1 ? p1 : p2;
+
+      // 如果處於「答錯冷凍懲罰期」，完全不予理會
+      if (state.isFrozen) return;
+
       const target = sanitizeWord(state.target.word);
 
       if (key === 'CLEAR') {
         state.typed = '';
+        playBeep(260, 'sine', 0.08);
       } else if (key === 'DEL') {
         state.typed = state.typed.slice(0, -1);
+        playBeep(320, 'sine', 0.05);
       } else {
         let nextIdx = state.typed.length;
         if (target[nextIdx] === ' ') {
           state.typed += ' ';
           nextIdx++;
         }
-        if (state.typed.length < target.length && key === target[nextIdx].toUpperCase()) {
+
+        const expectedChar = target[nextIdx] ? target[nextIdx].toUpperCase() : '';
+
+        // ⭕ 按對了正確的下一個字母
+        if (key === expectedChar) {
           state.typed += key.toLowerCase();
+          playBeep(520, 'sine', 0.06);
 
           if (state.typed === target) {
-            // 答對，拉繩一步！
+            // 單字拼完！拉繩一步！
             if (pId === 1) tugState -= 1;
             else tugState += 1;
             refreshRope();
@@ -945,10 +1016,7 @@
               const loser = (winner === matchInfo.p1) ? matchInfo.p2 : matchInfo.p1;
               
               alert(`🎉 恭喜 ${winner} 獲勝！勇奪 +2 分！\n結果已回傳，大螢幕將自動安排下一輪戰局！`);
-              
-              // 處理結果與自動配對
               finishMatchAndAutoSchedule(winner, loser);
-
               document.getElementById('arenaView').style.display = 'none';
               switchView('playerLoginView');
               return;
@@ -956,23 +1024,51 @@
             nextWord(pId);
             return;
           }
+        } else {
+          // ❌ 按錯字母！觸發防作弊懲罰機制（冷凍 1.2 秒 + 清空該單字 + 劇烈震動 + 錯誤音）
+          triggerCheatPenalty(pId);
+          return;
         }
       }
       renderPlayerTiles(pId);
     }
 
-    // 核心：分出勝負後的智慧動態排程機制
+    // 觸發防作弊懲罰
+    function triggerCheatPenalty(pId) {
+      const state = pId === 1 ? p1 : p2;
+      state.isFrozen = true;
+      state.typed = ''; // 處罰：把剛拼的全部清空，打掉重練！
+
+      // 低頻錯誤警示音
+      playBeep(140, 'sawtooth', 0.3);
+
+      const zoneElem = document.getElementById(pId === 1 ? 'p1Zone' : 'p2Zone');
+      const freezeTag = document.getElementById(pId === 1 ? 'p1FreezeTag' : 'p2FreezeTag');
+      const promptElem = document.getElementById(pId === 1 ? 'p1Prompt' : 'p2Prompt');
+
+      zoneElem.classList.add('frozen');
+      freezeTag.style.display = 'inline-block';
+      promptElem.classList.add('shake-anim');
+
+      renderPlayerTiles(pId);
+
+      // 冷凍 1.2 秒倒數解鎖
+      setTimeout(() => {
+        state.isFrozen = false;
+        zoneElem.classList.remove('frozen');
+        freezeTag.style.display = 'none';
+        promptElem.classList.remove('shake-anim');
+      }, 1200);
+    }
+
     function finishMatchAndAutoSchedule(winner, loser) {
       const activeMatchPath = isRedemptionMatch 
         ? `tournament/redemption/match_${activeTableCode}` 
         : `tournament/matches/match_${activeTableCode}`;
 
-      // 1. 標記當前戰局獲勝者，並在雲端 +2 分
       db.ref(activeMatchPath).update({ winner: winner });
       db.ref(`tournament/scores/${winner}`).transaction((cur) => (cur || 0) + 2);
 
-      // 2. 獲勝者進入「主戰場待配對池」（無論來自勝部還是剛從敗部復活！）
-      //    只要滿 2 人，立刻在左邊主戰區生成一桌新對決！
       db.ref('tournament').transaction((currentData) => {
         if (!currentData) return currentData;
 
@@ -982,10 +1078,7 @@
         let redemption = currentData.redemption || {};
         let maxTable = currentData.maxTableNumber || 100;
 
-        // --- 處理贏家（重返左邊主戰場）---
-        if (!mainWaiting.includes(winner)) {
-          mainWaiting.push(winner);
-        }
+        if (!mainWaiting.includes(winner)) mainWaiting.push(winner);
 
         if (mainWaiting.length >= 2) {
           const pA = mainWaiting.shift();
@@ -999,11 +1092,7 @@
           };
         }
 
-        // --- 處理輸家（進入敗部復活戰）---
-        // 如果是在復活賽又輸了，依舊讓他留在敗部池繼續找其他同學對決，無限重玩！
-        if (!loserWaiting.includes(loser)) {
-          loserWaiting.push(loser);
-        }
+        if (!loserWaiting.includes(loser)) loserWaiting.push(loser);
 
         if (loserWaiting.length >= 2) {
           const lA = loserWaiting.shift();
