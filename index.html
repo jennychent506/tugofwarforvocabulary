@@ -319,7 +319,7 @@
       border-top: 5px solid var(--dopa-dark);
     }
 
-    /* 答錯防作弊冷凍狀態：鍵盤半透明鎖定 + 提示紅標 */
+    /* 答錯防作弊冷凍狀態 */
     .player-zone.frozen {
       filter: saturate(0.6);
     }
@@ -344,7 +344,6 @@
     .p-name-badge.red { background: var(--dopa-pink); color: #fff; }
     .p-name-badge.blue { background: var(--dopa-blue); color: var(--dopa-dark); }
 
-    /* 防作弊冷凍警告提示徽章 */
     .freeze-badge {
       display: none;
       background: #ef4444;
@@ -377,7 +376,6 @@
       line-height: 1.3;
       transition: all 0.15s;
     }
-    /* 答錯劇烈左右震動動畫 */
     .shake-anim {
       animation: shake 0.3s ease-in-out;
       border-color: #ef4444 !important;
@@ -513,15 +511,15 @@
         <div class="scope-chip active" id="chipL1" onclick="toggleScope('L1')">B3L1</div>
         <div class="scope-chip active" id="chipL2" onclick="toggleScope('L2')">B3L2</div>
         <div class="scope-chip active" id="chipL3" onclick="toggleScope('L3')">B3L3</div>
-        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">（防作弊啟用：按錯字母冷凍 1.2 秒 + 清空該字！）</span>
+        <span style="color:#64748b; font-size:16px; margin-left:auto; font-weight:800;">🔒 管理操作需教師密碼保護</span>
       </div>
 
       <div style="font-weight:900; font-size:18px; margin-bottom:8px;">👥 參賽同學名單（座號或姓名）：</div>
       <textarea id="studentListInput" class="names-area">1號, 2號, 3號, 4號, 5號, 6號, 7號, 8號</textarea>
       
-      <div style="display:flex; gap:14px; flex-wrap:wrap;">
-        <button class="btn btn-fire" onclick="startTournament()">🎲 隨機分組並展開對戰</button>
-        <button class="btn btn-screen" onclick="resetAll()">🔄 清空比賽記錄</button>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+        <button class="btn btn-fire" onclick="handleTeacherAction('start')">🎲 隨機分組並展開對戰 🔒</button>
+        <button class="btn btn-screen" onclick="handleTeacherAction('reset')">🔄 清空比賽記錄 🔒</button>
       </div>
     </div>
 
@@ -580,7 +578,6 @@
 
   <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
   <div id="arenaView">
-    <!-- 上方紅方選手 (180 度反轉) -->
     <div class="player-zone p1-up" id="p1Zone">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
@@ -592,14 +589,12 @@
       <div class="keyboard-wrapper" id="p1KeyboardArea"></div>
     </div>
 
-    <!-- 中央巨大多巴胺拔河槽 -->
     <div class="arena-divider">
       <div class="giant-rope">
         <div class="bow-ribbon" id="bowRibbon"></div>
       </div>
     </div>
 
-    <!-- 下方藍方選手 (正常視角) -->
     <div class="player-zone p2-down" id="p2Zone">
       <div class="p-status-bar">
         <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
@@ -614,13 +609,38 @@
 
   <script>
     // ==========================================
-    // ⚙️ 1. FIREBASE 雲端即時連線設定
+    // ⚙️ 1. 教師管理密碼設定與 FIREBASE 雲端連線
     // ==========================================
+    const TEACHER_PASSWORD = "jennyt506"; // 👈 您可以在此隨時自訂專屬密碼！
+    let isTeacherAuthenticated = false;   // 記錄本機是否已驗證通過
+
     const firebaseConfig = {
       databaseURL: "https://vocab-tournament-default-rtdb.asia-southeast1.firebasedatabase.app/"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    // 教師身分驗證守門函式
+    function checkTeacherAuth() {
+      if (isTeacherAuthenticated) return true;
+      const inputPwd = prompt("🔑 請輸入教師專屬管理密碼：");
+      if (inputPwd === TEACHER_PASSWORD) {
+        isTeacherAuthenticated = true;
+        return true;
+      } else if (inputPwd !== null) {
+        alert("❌ 密碼錯誤！只有老師可以執行隨機分組或清空記錄。");
+      }
+      return false;
+    }
+
+    function handleTeacherAction(actionType) {
+      if (!checkTeacherAuth()) return;
+      if (actionType === 'start') {
+        startTournament();
+      } else if (actionType === 'reset') {
+        resetAll();
+      }
+    }
 
     // 完整三課單字片語資料庫
     const FULL_DICTIONARY = {
@@ -673,6 +693,7 @@
     let selectedLessons = ['L1', 'L2', 'L3'];
 
     function toggleScope(l) {
+      if (!checkTeacherAuth()) return;
       const chip = document.getElementById(`chip${l}`);
       if (selectedLessons.includes(l)) {
         if (selectedLessons.length === 1) return;
@@ -719,7 +740,6 @@
           };
           tableCount++;
         } else {
-          // 單數輪空直接加 2 分
           const lucky = shuffled[i];
           initialScores[lucky] = 2;
           matches[`match_${tableCount}`] = {
@@ -744,7 +764,7 @@
     }
 
     function resetAll() {
-      if (confirm("確定要清空所有比分與對戰記錄嗎？")) {
+      if (confirm("⚠️ 警告：確定要清空所有比分與對戰記錄嗎？本操作無法復原。")) {
         db.ref('tournament').remove();
       }
     }
@@ -862,7 +882,6 @@
     const p1 = { typed: '', target: null, isFrozen: false };
     const p2 = { typed: '', target: null, isFrozen: false };
 
-    // 音效合成（防作弊警示音與按鍵音）
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(freq, type = 'sine', duration = 0.1) {
       try {
@@ -975,12 +994,10 @@
       }
     }
 
-    // 核心鍵盤輸入處理與防作弊處罰
     function pressKey(pId, key) {
       if (Math.abs(tugState) >= 5) return;
       const state = pId === 1 ? p1 : p2;
 
-      // 如果處於「答錯冷凍懲罰期」，完全不予理會
       if (state.isFrozen) return;
 
       const target = sanitizeWord(state.target.word);
@@ -1000,13 +1017,11 @@
 
         const expectedChar = target[nextIdx] ? target[nextIdx].toUpperCase() : '';
 
-        // ⭕ 按對了正確的下一個字母
         if (key === expectedChar) {
           state.typed += key.toLowerCase();
           playBeep(520, 'sine', 0.06);
 
           if (state.typed === target) {
-            // 單字拼完！拉繩一步！
             if (pId === 1) tugState -= 1;
             else tugState += 1;
             refreshRope();
@@ -1025,7 +1040,6 @@
             return;
           }
         } else {
-          // ❌ 按錯字母！觸發防作弊懲罰機制（冷凍 1.2 秒 + 清空該單字 + 劇烈震動 + 錯誤音）
           triggerCheatPenalty(pId);
           return;
         }
@@ -1033,13 +1047,11 @@
       renderPlayerTiles(pId);
     }
 
-    // 觸發防作弊懲罰
     function triggerCheatPenalty(pId) {
       const state = pId === 1 ? p1 : p2;
       state.isFrozen = true;
-      state.typed = ''; // 處罰：把剛拼的全部清空，打掉重練！
+      state.typed = '';
 
-      // 低頻錯誤警示音
       playBeep(140, 'sawtooth', 0.3);
 
       const zoneElem = document.getElementById(pId === 1 ? 'p1Zone' : 'p2Zone');
@@ -1052,7 +1064,6 @@
 
       renderPlayerTiles(pId);
 
-      // 冷凍 1.2 秒倒數解鎖
       setTimeout(() => {
         state.isFrozen = false;
         zoneElem.classList.remove('frozen');
