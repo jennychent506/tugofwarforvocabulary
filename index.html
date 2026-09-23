@@ -267,9 +267,9 @@
       font-weight: 900;
     }
 
-    /* ====== 學生 iPad 登入端 ====== */
+    /* ====== 學生 iPad 登入端（極簡化：只需輸入桌號） ====== */
     #playerLoginView {
-      max-width: 480px;
+      max-width: 500px;
       margin: 60px auto;
       background: #fff;
       border: 5px solid var(--dopa-dark);
@@ -291,7 +291,7 @@
       background: #fffdf5;
     }
 
-    /* ====== 拔河對戰實體 (iPad 巨型超大字體視角) ====== */
+    /* ====== 拔河對戰實體 (iPad 巨型超大字體面對面視角) ====== */
     #arenaView {
       position: fixed;
       inset: 0;
@@ -559,25 +559,20 @@
     </div>
   </div>
 
-  <!-- 2. 學生 iPad 登入端 -->
+  <!-- 2. 學生 iPad 登入端（極簡化：面對面共用，只需輸入桌號） -->
   <div id="playerLoginView" class="view-container">
     <h2 style="font-size:32px; font-weight:900; color:var(--dopa-pink); margin-bottom:10px;">👑 我是全能拼字王！</h2>
-    <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看黑板上的桌號並輸入：</p>
+    <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看大螢幕上的分組桌號並輸入：</p>
     
-    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (輸入數字，如 1、2、10... 或復活桌 R1、R2...)</label>
-    <input type="text" id="tblNumber" class="dopa-input" value="1" placeholder="例如：1 或 R1">
+    <label style="font-weight:900; font-size:18px;">你的對戰桌號 (Table #)</label>
+    <input type="text" id="tblNumber" class="dopa-input" value="1" placeholder="輸入數字（如 1、2...）或復活桌（如 R1、R2）">
 
-    <label style="font-weight:900; font-size:18px;">選擇你的站位</label>
-    <select id="playerSide" class="dopa-input">
-      <option value="1">🔴 紅方選手（上方旋轉視角）</option>
-      <option value="2">🔵 藍方選手（下方視角）</option>
-    </select>
-
-    <button class="btn btn-fire" style="width:100%; padding:16px; font-size:24px;" onclick="enterBattle()">🚀 進入戰場！</button>
+    <button class="btn btn-fire" style="width:100%; padding:16px; font-size:24px;" onclick="enterBattle()">🚀 兩人就位，進入戰場！</button>
   </div>
 
-  <!-- 3. 拔河戰鬥畫面 (iPad 面對面) -->
+  <!-- 3. 拔河戰鬥畫面 (iPad 面對面共用) -->
   <div id="arenaView">
+    <!-- 上方紅方選手 (180 度反轉，對面看完全正向) -->
     <div class="player-zone p1-up" id="p1Zone">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
@@ -589,12 +584,14 @@
       <div class="keyboard-wrapper" id="p1KeyboardArea"></div>
     </div>
 
+    <!-- 中央巨大多巴胺拔河槽 -->
     <div class="arena-divider">
       <div class="giant-rope">
         <div class="bow-ribbon" id="bowRibbon"></div>
       </div>
     </div>
 
+    <!-- 下方藍方選手 (正常視角) -->
     <div class="player-zone p2-down" id="p2Zone">
       <div class="p-status-bar">
         <span class="p-name-badge blue" id="p2NameTag">🔵 藍方隊友</span>
@@ -611,8 +608,8 @@
     // ==========================================
     // ⚙️ 1. 教師管理密碼設定與 FIREBASE 雲端連線
     // ==========================================
-    const TEACHER_PASSWORD = "jennyt506"; // 👈 您可以在此隨時自訂專屬密碼！
-    let isTeacherAuthenticated = false;   // 記錄本機是否已驗證通過
+    const TEACHER_PASSWORD = "teacher888"; // 👈 教師專屬管理密碼
+    let isTeacherAuthenticated = false;
 
     const firebaseConfig = {
       databaseURL: "https://vocab-tournament-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -620,7 +617,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 教師身分驗證守門函式
     function checkTeacherAuth() {
       if (isTeacherAuthenticated) return true;
       const inputPwd = prompt("🔑 請輸入教師專屬管理密碼：");
@@ -628,7 +624,7 @@
         isTeacherAuthenticated = true;
         return true;
       } else if (inputPwd !== null) {
-        alert("❌ 密碼錯誤！只有老師可以執行隨機分組或清空記錄。");
+        alert("❌ 密碼錯誤！只有老師可以執行分組或重置操作。");
       }
       return false;
     }
