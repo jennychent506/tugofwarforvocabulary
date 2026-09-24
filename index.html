@@ -267,7 +267,7 @@
       font-weight: 900;
     }
 
-    /* ====== 學生 iPad 登入端（極簡化：只需輸入桌號） ====== */
+    /* ====== 學生 iPad 登入端 ====== */
     #playerLoginView {
       max-width: 500px;
       margin: 60px auto;
@@ -423,7 +423,7 @@
     }
 
     .keyboard-wrapper {
-      max-width: 840px;
+      max-width: 860px;
       margin: 0 auto;
       width: 100%;
       transition: opacity 0.2s;
@@ -453,10 +453,13 @@
       background: var(--dopa-yellow);
     }
     .dopa-key.action-btn {
-      flex: 1.6;
-      max-width: 94px;
-      font-size: 18px;
+      flex: 1.5;
+      max-width: 90px;
+      font-size: 17px;
       background: #ffd3b6;
+    }
+    .dopa-key.quote-btn {
+      background: #e0f2fe;
     }
 
     .arena-divider {
@@ -559,7 +562,7 @@
     </div>
   </div>
 
-  <!-- 2. 學生 iPad 登入端（極簡化：面對面共用，只需輸入桌號） -->
+  <!-- 2. 學生 iPad 登入端（面對面共用，只需輸入桌號） -->
   <div id="playerLoginView" class="view-container">
     <h2 style="font-size:32px; font-weight:900; color:var(--dopa-pink); margin-bottom:10px;">👑 我是全能拼字王！</h2>
     <p style="color:#64748b; font-weight:800; font-size:18px; margin-bottom:24px;">請查看大螢幕上的分組桌號並輸入：</p>
@@ -572,7 +575,7 @@
 
   <!-- 3. 拔河戰鬥畫面 (iPad 面對面共用) -->
   <div id="arenaView">
-    <!-- 上方紅方選手 (180 度反轉，對面看完全正向) -->
+    <!-- 上方紅方選手 (180 度反轉) -->
     <div class="player-zone p1-up" id="p1Zone">
       <div class="p-status-bar">
         <span class="p-name-badge red" id="p1NameTag">🔴 紅方隊友</span>
@@ -638,7 +641,7 @@
       }
     }
 
-    // 完整三課單字片語資料庫
+    // 完整三課單字片語資料庫（保留所有格 '）
     const FULL_DICTIONARY = {
       L1: [
         { word: "after all", def: "畢竟" }, { word: "be about to", def: "即將；正要" }, { word: "cheer up", def: "使......振奮、高興" },
@@ -952,6 +955,7 @@
       refreshRope();
     }
 
+    // 保留英文字母、空格與單引號 '
     function sanitizeWord(w) { return w.toLowerCase().replace(/[^a-z\s']/g, ''); }
 
     function nextWord(pId) {
@@ -1130,10 +1134,11 @@
       document.getElementById('p2StepLabel').innerText = `拉動: ${Math.max(0, tugState)}`;
     }
 
+    // 鍵盤佈局：第三排加入單引號 '
     const DOPA_KEYS = [
       ['Q','W','E','R','T','Y','U','I','O','P'],
       ['A','S','D','F','G','H','J','K','L'],
-      ['DEL','Z','X','C','V','B','N','M','CLEAR']
+      ['DEL','Z','X','C','V','B','N','M', "'", 'CLEAR']
     ];
 
     function renderKeys(containerId, pId) {
@@ -1144,7 +1149,11 @@
         r.className = 'key-row';
         row.forEach(k => {
           const btn = document.createElement('button');
-          btn.className = 'dopa-key' + (k.length > 1 ? ' action-btn' : '');
+          let extraClass = '';
+          if (k.length > 1) extraClass = ' action-btn';
+          else if (k === "'") extraClass = ' quote-btn';
+          
+          btn.className = 'dopa-key' + extraClass;
           btn.innerText = k;
           btn.onpointerdown = (e) => { e.preventDefault(); pressKey(pId, k); };
           r.appendChild(btn);
