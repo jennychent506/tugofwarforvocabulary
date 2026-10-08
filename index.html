@@ -40,7 +40,7 @@
       overflow-x: hidden;
     }
 
-    /* 頂部多巴胺色彩條 */
+    /* 頂部導覽列 */
     header {
       background: #ffffff;
       padding: 14px 28px;
@@ -78,7 +78,7 @@
     .btn-ipad { background: var(--dopa-yellow); color: var(--dopa-dark); }
     .btn-fire { background: var(--dopa-pink); color: #fff; }
 
-    /* 寬版主容器 */
+    /* 容器控制 */
     .view-container { 
       padding: 20px 24px; 
       width: 98%; 
@@ -86,7 +86,6 @@
       margin: 0 auto; 
     }
 
-    /* 初始顯隱：純 CSS 控管，絕不空白 */
     #hostView { display: block; }
     #playerLoginView { display: none; }
     #arenaView { display: none; }
@@ -152,7 +151,7 @@
       font-weight: 900;
     }
 
-    /* 三欄超寬面板 */
+    /* 三欄面板 */
     .arena-dashboard {
       display: grid;
       grid-template-columns: 1.65fr 1.15fr 1fr;
@@ -610,12 +609,12 @@
       const firebaseConfig = {
         databaseURL: "https://vocab-tournament-99ef2-default-rtdb.firebaseio.com/"
       };
-      if (firebase && !firebase.apps.length) {
+      if (typeof firebase !== 'undefined' && !firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
       }
       db = firebase.database();
     } catch(err) {
-      console.warn("Firebase 離線或初始化異常:", err);
+      console.warn("Firebase 初始化提醒:", err);
     }
 
     function checkTeacherAuth() {
@@ -710,7 +709,7 @@
     }
 
     function startTournament() {
-      if (!db) { alert("無法連線至雲端資料庫，請檢查網路！"); return; }
+      if (!db) { alert("尚未連線到資料庫，請檢查網路！"); return; }
       const raw = document.getElementById('studentListInput').value;
       const names = raw.split(/[\n,，]+/).map(s => s.trim()).filter(s => s);
       if (names.length < 2) {
@@ -894,7 +893,7 @@
       });
     }
 
-    /* ====== 拔河對戰實體 ====== */
+    /* ====== 拔河對戰實體 (學生 iPad 端) ====== */
     let activeTableCode = "1";
     let isRedemptionMatch = false;
     let matchInfo = null;
@@ -902,8 +901,8 @@
     const p1 = { typed: '', target: null, isFrozen: false };
     const p2 = { typed: '', target: null, isFrozen: false };
 
+    // 核心修復：進入戰場邏輯（支援容錯進入）
     function enterBattle() {
-      if (!db) { alert("無法連線至雲端資料庫！"); return; }
       const inputVal = document.getElementById('tblNumber').value.trim();
       if (!inputVal) {
         alert("請輸入桌號！");
@@ -916,34 +915,70 @@
         ? `tournament/redemption/match_${activeTableCode}` 
         : `tournament/matches/match_${activeTableCode}`;
 
-      db.ref(activeMatchPath).once('value', (snap) => {
-        matchInfo = snap.val();
-        if (!matchInfo) {
-          alert(`找不到【${activeTableCode}】的對戰資訊！請確認大螢幕上是否有此桌。`);
-          return;
-        }
-
-        if (matchInfo.winner) {
-          alert(`這桌（${activeTableCode}）已經分出勝負囉！請查看大螢幕找新桌號。`);
-          return;
-        }
-
+      const launchGame = (p1Name, p2Name) => {
         switchView('arenaView');
-        document.getElementById('p1NameTag').innerText = `🔴 ${matchInfo.p1}`;
-        document.getElementById('p2NameTag').innerText = `🔵 ${matchInfo.p2}`;
+        document.getElementById('p1NameTag').innerText = `🔴 ${p1Name}`;
+        document.getElementById('p2NameTag').innerText = `🔵 ${p2Name}`;
 
-        db.ref('tournament/settings/scope').once('value', (scSnap) => {
-          const scope = scSnap.val() || ['L1', 'L2', 'L3'];
-          buildPool(scope);
+        if (db) {
+          db.ref('tournament/settings/scope').once('value', (scSnap) => {
+            const scope = scSnap.val() || ['L1', 'L2', 'L3'];
+            buildPool(scope);
+            initArena();
+          });
+        } else {
+          buildPool(['L1', 'L2', 'L3']);
           initArena();
+        }
+      };
+
+      if (db) {
+        // 設定 2 秒逾時保護，避免 Firebase 離線時卡住沒反應
+        let responded = false;
+        const timer = setTimeout(() => {
+          if (!responded) {
+            responded = true;
+            console.warn("Firebase 讀取較慢，直接以本地對戰模式進入！");
+            matchInfo = { p1: `選手 A (第${activeTableCode}桌)`, p2: `選手 B (第${activeTableCode}桌)` };
+            launchGame(matchInfo.p1, matchInfo.p2);
+          }
+        }, 2000);
+
+        db.ref(activeMatchPath).once('value', (snap) => {
+          if (responded) return;
+          responded = true;
+          clearTimeout(timer);
+          
+          matchInfo = snap.val();
+          if (!matchInfo) {
+            // 如果大螢幕尚未分組，依舊允許直接開局測試！
+            matchInfo = { p1: `選手 A (第${activeTableCode}桌)`, p2: `選手 B (第${activeTableCode}桌)` };
+          }
+
+          if (matchInfo.winner) {
+            alert(`這桌（${activeTableCode}）已經分出勝負囉！請查看大螢幕找新桌號。`);
+            return;
+          }
+
+          launchGame(matchInfo.p1, matchInfo.p2);
+        }, (err) => {
+          if (responded) return;
+          responded = true;
+          clearTimeout(timer);
+          alert("資料庫連線權限受阻，請確保 Firebase Rules 設為 true！現在以離線模式開局。");
+          matchInfo = { p1: `選手 A`, p2: `選手 B` };
+          launchGame(matchInfo.p1, matchInfo.p2);
         });
-      });
+      } else {
+        matchInfo = { p1: `選手 A`, p2: `選手 B` };
+        launchGame(matchInfo.p1, matchInfo.p2);
+      }
     }
 
     let battlePool = [];
     function buildPool(scopeList) {
       battlePool = [];
-      scopeList.forEach(l => {
+      (scopeList || ['L1', 'L2', 'L3']).forEach(l => {
         if (FULL_DICTIONARY[l]) battlePool.push(...FULL_DICTIONARY[l]);
       });
     }
@@ -952,6 +987,12 @@
       tugState = 0;
       p1.isFrozen = false;
       p2.isFrozen = false;
+      
+      const z1 = document.getElementById('p1Zone');
+      const z2 = document.getElementById('p2Zone');
+      if (z1) z1.classList.remove('frozen');
+      if (z2) z2.classList.remove('frozen');
+
       renderKeys('p1KeyboardArea', 1);
       renderKeys('p2KeyboardArea', 2);
       nextWord(1);
@@ -1139,10 +1180,13 @@
           btn.className = 'dopa-key' + extraClass;
           btn.innerText = k;
 
-          btn.addEventListener('pointerdown', (e) => {
+          // 核心相容綁定：同時支援滑鼠、觸控與 iPad 點擊
+          const handleInput = (e) => {
             e.preventDefault();
             pressKey(pId, k);
-          });
+          };
+
+          btn.addEventListener('pointerdown', handleInput);
           r.appendChild(btn);
         });
         container.appendChild(r);
